@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
 import useFetch from './useFetch';
 
-const Question = () => {
+const Question = (props) => {
     const { qid } = useParams();
     const { data, isLoading, error } = useFetch(`http://localhost:4000/question/${qid}`);
     const [question, setQuestion] = useState(null);
@@ -26,6 +26,7 @@ const Question = () => {
                         [...Array(numOfQuestion).keys()].map(el => <button key={el} onClick={() => {
                             setQuestion(data[el]);
                             setQusNo(el + 1);
+                            props.setQueId(data[el].id);
                         }}> {el + 1} </button>)
                     }
                 </div>

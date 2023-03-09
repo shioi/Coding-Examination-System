@@ -5,16 +5,22 @@ import { useState, useEffect } from "react";
 const EditorView = (props) => {
     const [language, setLanguage] = useState('python');
     const [code, setCode] = useState(null);
+    const [question, setQuestion] = useState(null);
 
     const handleEditorChange = (value) => {
         setCode(value);
     }
 
+    useEffect(() => {
+        setQuestion(props.qId);
+    }, [props])
+
     const submitCode = (code, language) => {
         const url = "http://localhost:4000/postcode";
         const finalcode = {
             lang: language,
-            content: code
+            content: code,
+            questionId: question,
         };
         fetch(url, {
             method: 'POST',

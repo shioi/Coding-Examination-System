@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
 
 app.post('/postcode', (req, res) => {
     const data = JSON.parse(JSON.stringify(req.body));
+    console.log(data);
     python.runPython(data.content, (data) => {
         res.status(200).json(data);
     });

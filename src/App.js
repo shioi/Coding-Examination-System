@@ -10,7 +10,13 @@ function App() {
   const sendOutput = (data) => {
     setOutput(data);
   }
+
+  const setQueId = (data) => {
+    console.log(data);
+    setQId(data);
+  }
   const [output, setOutput] = useState(null);
+  const [qId, setQId] = useState(null);
   return (
     <Router>
       <div className="App">
@@ -20,10 +26,10 @@ function App() {
             <Route exact path="/question/:qid">
               <div className="main">
                 <div className="main-side">
-                  <Question />
+                  <Question setQueId={setQueId} />
                   <Output out={output} />
                 </div>
-                <EditorView setOutput={sendOutput} />
+                <EditorView setOutput={sendOutput} qId={qId} />
               </div>
             </Route>
             <Route exact path="/">

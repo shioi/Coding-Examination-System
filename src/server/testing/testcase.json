@@ -1,0 +1,83 @@
+[
+    {
+        "functionName": "sumL",
+        "type": "value",
+        "tests": [
+            {
+                "Inputs": [
+                    {
+                        "input": "[1,2,3]"
+                    }
+                ],
+                "Output": "5"
+            },
+            {
+                "Inputs": [
+                    {
+                        "input": "[2,2,3]"
+                    }
+                ],
+                "Output": "7"
+            }
+        ]
+    },
+    {
+        "functionName": "prod",
+        "type": "value",
+        "tests": [
+            {
+                "Inputs": [
+                    {
+                        "input": "[1,2,3]"
+                    }
+                ],
+                "Output": "6"
+            },
+            {
+                "Inputs": [
+                    {
+                        "input": "[2,5]"
+                    }
+                ],
+                "Output": "10"
+            }
+        ]
+    },
+    {
+        "functionName": "subs",
+        "type": "value",
+        "tests": [
+            {
+                "Inputs": [
+                    {
+                        "input": "2"
+                    },
+                    {
+                        "input": "2"
+                    }
+                ],
+                "Output": "0"
+            }
+        ]
+    },
+    {
+        "functionName": "Hello",
+        "type": "value",
+        "tests": [
+            {
+                "Inputs": [],
+                "Output": "'Hello'"
+            }
+        ]
+    },
+    {
+        "functionName": "printHello",
+        "type": "output",
+        "tests": [
+            {
+                "Inputs": [],
+                "Output": "hello"
+            }
+        ]
+    }
+]
