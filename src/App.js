@@ -5,16 +5,19 @@ import EditorView from "./editorView";
 import Output from "./Output";
 import { useState } from "react";
 import Exam from "./Exam";
+import CreateExam from "./createExam";
 
 function App() {
   const sendOutput = (data) => {
+    //console.log(data)
     setOutput(data);
   }
 
   const setQueId = (data) => {
-    console.log(data);
+    console.log(data)
     setQId(data);
   }
+
   const [output, setOutput] = useState(null);
   const [qId, setQId] = useState(null);
   return (
@@ -26,11 +29,14 @@ function App() {
             <Route exact path="/question/:qid">
               <div className="main">
                 <div className="main-side">
-                  <Question setQueId={setQueId} />
+                  <Question setQueId={setQueId} setOutput={sendOutput} />
                   <Output out={output} />
                 </div>
                 <EditorView setOutput={sendOutput} qId={qId} />
               </div>
+            </Route>
+            <Route exact path="/createExam">
+              <CreateExam />
             </Route>
             <Route exact path="/">
               <Exam />

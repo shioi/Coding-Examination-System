@@ -6,7 +6,7 @@ const EditorView = (props) => {
     const [language, setLanguage] = useState('python');
     const [code, setCode] = useState(null);
     const [question, setQuestion] = useState(null);
-
+    const [questionCode, setQuestionCode] = useState(null);
     const handleEditorChange = (value) => {
         setCode(value);
     }
@@ -17,6 +17,7 @@ const EditorView = (props) => {
 
     const submitCode = (code, language) => {
         const url = "http://localhost:4000/postcode";
+        console.log(question);
         const finalcode = {
             lang: language,
             content: code,
@@ -57,6 +58,7 @@ const EditorView = (props) => {
                     width="770px"
                     language={language}
                     onChange={handleEditorChange}
+                    value={questionCode}
                 />
             </div>
             <div className="submit-button">

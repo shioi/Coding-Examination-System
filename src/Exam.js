@@ -7,10 +7,10 @@ const Exam = () => {
             <h1>Current Exams</h1>
             {error && <div>{error}</div>}
             {isLoading && <div>Loading ...</div>}
-            {data && data.map(question => {
+            {data && data.map((question, index) => {
                 return (
-                    <ul>
-                        <li key={question.id}>
+                    <ul key={question.id}>
+                        <li>
                             <h2>{question.name}</h2>
                             <h3>{question.duration}</h3>
                             <p>Total Marks: {question.totalMarks}</p>
@@ -19,7 +19,6 @@ const Exam = () => {
                             <Link to={`/question/${question.id}`}>
                                 <button>Attempt</button>
                             </Link>
-
                         </li>
                     </ul>
                 )

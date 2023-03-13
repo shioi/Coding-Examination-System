@@ -8,10 +8,11 @@ if(len(sys.argv) < 2):
     print("give arguments")
     sys.exit(1)
 testFileName = sys.argv[1]+".py"
+testJsonName = sys.argv[2]
 
 
 try:
-    jsonFile = open('testcase.json')
+    jsonFile = open(testJsonName)
 except:
     print("cannot open file!! error")
 
@@ -27,7 +28,7 @@ def return_tab(times):
 
 #all the boilereplate code goes here
 def write_boilerplate_head():
-    code = f"""import sumoflist as n\nfrom ast import literal_eval\nimport sys\nfrom difflib import Differ\nimport os\n"""
+    code = f"""import file as n\nfrom ast import literal_eval\nimport sys\nfrom difflib import Differ\nimport os\n"""
     with open(testFileName, "a") as f:
         f.write(code)    
 
@@ -46,10 +47,10 @@ def create_test(fname, inputString,output,number):
 def create_test_output(fname,inputString,output,number):
     code1 = f"def test_case_{fname}_{number}():\n{return_tab(1)}with open('output.txt','w') as sys.stdout:\n{return_tab(2)}n.{fname}({inputString[:-1]})\n"
     code3 = f"{return_tab(1)}i=0\n{return_tab(1)}isSame=True\n{return_tab(1)}sys.stdout = sys.__stdout__\n{return_tab(1)}codeout=''\n"
-    code4 = f'{return_tab(1)}compare="""{output}"""\n'
+    code4 = f'{return_tab(1)}compare="""\n{output}"""\n'
     code2 = f"{return_tab(1)}with open('output.txt','r') as f:\n{return_tab(2)}while True:\n{return_tab(3)}c=f.read(1)\n{return_tab(3)}codeout+=c\n{return_tab(3)}if not c:\n{return_tab(4)}break\n{return_tab(3)}if(i>=len(compare) or c!=compare[i]):\n"
-    code5=f"{return_tab(4)}print('Wrong Output')\n{return_tab(4)}isSame=False\n{return_tab(3)}i+=1\n"
-    code6 = f"{return_tab(1)}os.remove('output.txt')\n{return_tab(1)}if not isSame:\n{return_tab(2)}print('Your Output:',compare)\n{return_tab(2)}print('Expected output:',codeout)\n"
+    code5=f"{return_tab(4)}if(isSame):\n{return_tab(5)}print('Wrong Output')\n{return_tab(4)}isSame=False\n{return_tab(3)}i+=1\n"
+    code6 = f"{return_tab(1)}os.remove('output.txt')\n{return_tab(1)}if not isSame:\n{return_tab(2)}print('Expected Output:',compare)\n{return_tab(2)}print('Your output:',codeout)\n"
     code7 = f"{return_tab(1)}return isSame\n"
     with open(testFileName, "a") as f:
         f.write(code1)

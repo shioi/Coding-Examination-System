@@ -13,10 +13,9 @@ const Question = (props) => {
             setNumOfQuestion(Object.keys(data).length);
             setQuestion(data[0]);
             setQusNo(1);
-            //console.log(data[0]);
-            //console.log(numOfQuestion);
+            props.setQueId(data[0].id);
         }
-    }, [data, numOfQuestion])
+    }, [data])
     return (
         <div className="question">
             <div className="dropdown">
@@ -27,6 +26,7 @@ const Question = (props) => {
                             setQuestion(data[el]);
                             setQusNo(el + 1);
                             props.setQueId(data[el].id);
+                            props.setOutput(null)
                         }}> {el + 1} </button>)
                     }
                 </div>

@@ -3,6 +3,7 @@ var bodyParser = require('body-parser')
 const python = require('./services/python.js')
 const cors = require('cors');
 const dbms = require('./db');
+const crypto = require("crypto");
 const app = express();
 const port = 4000;
 
@@ -20,9 +21,24 @@ app.get("/", (req, res) => {
 app.post('/postcode', (req, res) => {
     const data = JSON.parse(JSON.stringify(req.body));
     console.log(data);
-    python.runPython(data.content, (data) => {
+    python.runPython(data.content, data.questionId, (data) => {
         res.status(200).json(data);
     });
+
+})
+
+app.post('/postquestion', async (req, res) => {
+    const data = req.body;
+    //python.convertToTest(data, dbms.postQuestion);
+    const algorithm = "aes-256-cbc";
+    const initVector = crypto.randomBytes(16);
+    const Securitykey = crypto.randomBytes(32);
+    const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+    let password = cipher.update(data.password, "utf-8", "hex");
+    password += cipher.final("hex");
+    dbms.postQuestion(data, password, python.convertToTest, (result) => {
+        res.status(200);
+    })
 
 })
 
