@@ -92,6 +92,7 @@ const convertToTest = (data, name, date, func) => {
         console.log("for: " + id);
         const folderpath = createFolder(dictPath, id);
         //write to file
+        console.log(funcFile)
         try {
             fs.writeFileSync(path.join(folderpath, "test.json"), JSON.stringify(funcFile));
         } catch (err) {

@@ -1,5 +1,8 @@
 import Editor from "@monaco-editor/react";
+import { TrendingUpOutlined } from "@mui/icons-material";
 import { useState, useEffect } from "react";
+import { usePageVisibility } from "react-page-visibility";
+import PageVisibility from "react-page-visibility/dist/umd/PageVisibility";
 
 
 const EditorView = (props) => {
@@ -7,13 +10,21 @@ const EditorView = (props) => {
     const [code, setCode] = useState(null);
     const [question, setQuestion] = useState(null);
     const [questionCode, setQuestionCode] = useState(null);
+    const [isActive, setIsActive] = useState(null);
     const handleEditorChange = (value) => {
         setCode(value);
     }
 
+
     useEffect(() => {
         setQuestion(props.qId);
+        setIsActive(true);
     }, [props])
+
+    const handleVisibilityChange = (visibility) => {
+        setIsActive(!visibility);
+        console.log("is there is tab: " + isActive);
+    }
 
     const submitCode = (code, language) => {
         const url = "http://localhost:4000/postcode";
@@ -44,6 +55,7 @@ const EditorView = (props) => {
 
     return (
         <div className="editor-view">
+            <PageVisibility onChange={handleVisibilityChange}></PageVisibility>
             <div className="dropdown">
                 <button className="dropbtn">{language}</button>
                 <div className="dropdown-content">
@@ -54,11 +66,13 @@ const EditorView = (props) => {
             <div className="editor">
                 <h3>Write your code here</h3>
                 <Editor
-                    height="70vh"
+                    height="500px"
                     width="770px"
                     language={language}
                     onChange={handleEditorChange}
+                    automaticLayout={true}
                     value={questionCode}
+
                 />
             </div>
             <div className="submit-button">

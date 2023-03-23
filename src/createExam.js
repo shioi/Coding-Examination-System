@@ -1,11 +1,16 @@
 import { useState } from "react";
+import TextareaAutosize from '@mui/base/TextareaAutosize';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+
+
 const CreateExam = () => {
     const [testInputFields, setTestInputFields] = useState([
         {
             Question: '',
             Functions: [{
                 functionName: '',
-                Type: '',
+                Type: 'value',
                 TestCases: [{
                     Input: '',
                     Output: ''
@@ -58,7 +63,7 @@ const CreateExam = () => {
             Question: '',
             Functions: [{
                 functionName: '',
-                Type: '',
+                Type: 'value',
                 TestCases: [{
                     Input: '',
                     Output: ''
@@ -70,7 +75,7 @@ const CreateExam = () => {
     }
 
     const addFunction = (index) => {
-        let newField = { functionName: '', Type: '', TestCases: [{ Input: '', Output: '' }] }
+        let newField = { functionName: '', Type: 'value', TestCases: [{ Input: '', Output: '' }] }
         let data = [...testInputFields];
         data[index].Functions = [...data[index].Functions, newField];
         setTestInputFields(data);
@@ -122,19 +127,21 @@ const CreateExam = () => {
     return (
         <div className="questionForm">
             <h1>Conduct Exam</h1>
-            <form onSubmit={submit}>
-                <input name="name" placeholder="name" value={examName} onChange={event => setExamName(event.target.value)} />
-                <input name="Subject" type="text" placeholder="Subject" value={subject} onChange={event => setSubject(event.target.value)} />
-                <input name="duration" placeholder="Duration" value={duration} onChange={event => setDuration(event.target.value)} />
-                <input name="totalMarks" placeholder="Total Marks" value={totalMarks} onChange={event => setTotalMarks(event.target.value)} />
-                <input name="password" placeholder="Exam Password" value={password} onChange={event => setPassword(event.target.value)} />
-                <input name="Date" type="Date" placeholder="Date" value={date} onChange={event => setDate(event.target.value)} />
-                <input name="Time" type="time" placeholder="Time" value={time} onChange={event => setTime(event.target.value)} />
+            <Box component="form" onSubmit={submit}>
+                <TextField label="name" name="name" value={examName} onChange={event => setExamName(event.target.value)} />
+                <TextField name="Subject" type="text" label="Subject" value={subject} onChange={event => setSubject(event.target.value)} />
+                <TextField name="totalMarks" label="Total Marks" value={totalMarks} onChange={event => setTotalMarks(event.target.value)} />
+                <TextField name="password" label="Exam Password" value={password} onChange={event => setPassword(event.target.value)} />
+                <TextField name="Date" InputLabelProps={{ shrink: true, required: true }} type="date" label="Date" value={date} onChange={event => setDate(event.target.value)} />
+                <TextField name="Time" InputLabelProps={{ shrink: true, required: true }} type="time" label="Time" value={time} onChange={event => setTime(event.target.value)} />
+                <TextField name="duration" label="Duration" value={duration} onChange={event => setDuration(event.target.value)} />
                 {testInputFields.map((input, index) => {
                     return (
                         <div key={index}>
                             <h3>Question No: {index + 1}</h3>
-                            <textarea
+                            <TextareaAutosize
+                                maxRows={900}
+                                style={{ width: 500 }}
                                 name="Question"
                                 placeholder="Question"
                                 value={input.Question}
@@ -143,7 +150,7 @@ const CreateExam = () => {
                             {input["Functions"].map((func, index2) => {
                                 return (
                                     <div key={index2}>
-                                        <input
+                                        <TextField
                                             name="functionName"
                                             placeholder="Function Name"
                                             value={func.functionName}
@@ -156,14 +163,14 @@ const CreateExam = () => {
                                         {func["TestCases"].map((cases, index3) => {
                                             return (
                                                 <div key={index3}>
-                                                    <input
+                                                    <TextField
                                                         name="Input"
                                                         placeholder="Test Input"
                                                         value={cases.Input}
                                                         onChange={event => handleTestFormChange(index, index2, index3, event)}
                                                     />
 
-                                                    <input
+                                                    <TextField
                                                         name="Output"
                                                         placeholder="Test Output"
                                                         value={cases.Output}
@@ -192,7 +199,7 @@ const CreateExam = () => {
                 <button onClick={addQuestion} type="button">Add Question</button>
 
                 <button onClick={submit}>Submit</button>
-            </form>
+            </Box>
         </div >
     );
 }

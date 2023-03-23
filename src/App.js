@@ -5,7 +5,14 @@ import EditorView from "./editorView";
 import Output from "./Output";
 import { useState } from "react";
 import Exam from "./Exam";
+import Login from "./Login";
+import Register from "./Register";
+import Signup from "./Signup";
 import CreateExam from "./createExam";
+import Box from '@mui/material/Box';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function App() {
   const sendOutput = (data) => {
@@ -18,6 +25,14 @@ function App() {
     setQId(data);
   }
 
+  const commonStyles = {
+    bgcolor: 'background.paper',
+    borderColor: 'text.primary',
+    m: 1,
+    border: 1,
+  };
+
+
   const [output, setOutput] = useState(null);
   const [qId, setQId] = useState(null);
   return (
@@ -27,25 +42,36 @@ function App() {
         <div className='content'>
           <Switch>
             <Route exact path="/question/:qid">
-              <div className="main">
-                <div className="main-side">
+              <Box className="main" >
+                <Box className="main-side" sx={{ display: 'flex', ...commonStyles, width: 800 }}>
                   <Question setQueId={setQueId} setOutput={sendOutput} />
                   <Output out={output} />
-                </div>
-                <EditorView setOutput={sendOutput} qId={qId} />
-              </div>
+                </Box>
+                <Box className="editor" sx={{ display: 'flex', ...commonStyles, width: 800 }}>
+                  <EditorView setOutput={sendOutput} qId={qId} />
+                </Box>
+              </Box>
             </Route>
             <Route exact path="/createExam">
               <CreateExam />
             </Route>
-            <Route exact path="/">
+            <Route exact path="/exam">
               <Exam />
-            </Route>
+            </Route>	      
+	      <Route exact path="/">
+		  <Login />
+		  </Route>
+              <Route exact path="/register" >
+		  <Register />
+	      </Route>
+	      <Route exact path="/signup" >
+		  <Signup />
+	      </Route>
           </Switch>
         </div>
 
       </div>
-    </Router>
+    </Router >
   );
 }
 

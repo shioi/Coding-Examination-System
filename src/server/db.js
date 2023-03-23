@@ -9,6 +9,7 @@ const pool = mysql.createPool({
 });
 
 
+
 const getExams = (func) => {
     const statement = "SELECT * from exams;";
     execution(statement, func);
@@ -53,13 +54,33 @@ const postQuestion = (data, pass, testconversion, func) => {
             let id = data.name + "-" + data.Date + "-" + index;
             pool.execute(statement2, [id, qus.Question], (err, result) => {
                 if (err) throw err;
+                pool.execute(statement3, [id, data.id], (err) => {
+                    if (err) throw err;
+                })
             })
-            pool.execute(statement3, [id, data.id], (err) => {
-                if (err) throw err;
-            })
+
         })
         testconversion(data.Questions, data.name, data.Date, func);
     })
 }
 
-module.exports = { getExams, getQuestion, findTestCase, postQuestion, insertTestCase };
+//for login and registration
+const retriveLogin = (func) => {
+    const sqlGet = "SELECT * FROM login";
+    pool.execute(sqlGet, (error, result) => {
+	if(error) throw error;
+	func(result);
+  });
+}
+
+const postRegister = (username, password, isProfessor,func) => {
+    const sqlInsert = "INSERT INTO login (username, password, isProfessor) VALUES (?, ?, ?)";
+    pool.execute(sqlInsert, (error, result) => {
+
+	if(error) throw error;
+	func();
+    })
+}
+
+module.exports = { getExams, getQuestion, findTestCase, postQuestion, insertTestCase, retriveLogin, postRegister };
+

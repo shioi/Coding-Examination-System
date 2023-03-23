@@ -48,7 +48,7 @@ def create_test_output(fname,inputString,output,number):
     code1 = f"def test_case_{fname}_{number}():\n{return_tab(1)}with open('output.txt','w') as sys.stdout:\n{return_tab(2)}n.{fname}({inputString[:-1]})\n"
     code3 = f"{return_tab(1)}i=0\n{return_tab(1)}isSame=True\n{return_tab(1)}sys.stdout = sys.__stdout__\n{return_tab(1)}codeout=''\n"
     code4 = f'{return_tab(1)}compare="""\n{output}"""\n'
-    code2 = f"{return_tab(1)}with open('output.txt','r') as f:\n{return_tab(2)}while True:\n{return_tab(3)}c=f.read(1)\n{return_tab(3)}codeout+=c\n{return_tab(3)}if not c:\n{return_tab(4)}break\n{return_tab(3)}if(i>=len(compare) or c!=compare[i]):\n"
+    code2 = f"{return_tab(1)}with open('output.txt','r') as f:\n{return_tab(2)}while True:\n{return_tab(3)}c=f.read(1)\n{return_tab(3)}codeout+=c\n{return_tab(3)}if not c:\n{return_tab(4)}if(i<len(compare)-1):\n{return_tab(5)}isSame=False\n{return_tab(4)}break\n{return_tab(3)}if(i>=len(compare) or c!=compare[i]):\n"
     code5=f"{return_tab(4)}if(isSame):\n{return_tab(5)}print('Wrong Output')\n{return_tab(4)}isSame=False\n{return_tab(3)}i+=1\n"
     code6 = f"{return_tab(1)}os.remove('output.txt')\n{return_tab(1)}if not isSame:\n{return_tab(2)}print('Expected Output:',compare)\n{return_tab(2)}print('Your output:',codeout)\n"
     code7 = f"{return_tab(1)}return isSame\n"
@@ -81,6 +81,7 @@ test_functions = []
 def parse_and_create():
     functions = json.load(jsonFile)
     for func in functions:
+        print(func)
         i=0    
         fname = func["functionName"]
         for test in func["tests"]:
@@ -89,12 +90,12 @@ def parse_and_create():
             for input in test["Inputs"]:
                 inp+=input["input"]+","
             out = test["Output"]
-            if(func["type"]=="value"):
+            if(func["type"]=="value" or func["type"]==''):
                 create_test(fname,inp,out,i)
             elif(func["type"] == "output"):
                 create_test_output(fname,inp,out+"\n",i)
 
-#TODO:Writing testing function that prints to standard ouput and not return 
+
 
 
 write_boilerplate_head()

@@ -54,10 +54,24 @@ app.get('/question/:qid', (req, res) => {
     dbms.getQuestion(id, (result) => {
         res.status(200).json(result);
     })
-
-
 })
+
+
+app.get("/api/get/login", (req, res) => {
+    dbms.retriveLogin((result) => {
+	res.send(result);
+    })
+});
+
+app.post("/api/post/signup", (req, res) => {
+    const { username, password, isProfessor } = req.body;
+    dbms.postRegister(username, password, isProfessor, ()=>{
+	res.status(200);
+    })
+});
+
 
 app.listen(port, () => {
     console.log("Listening at " + port);
 })
+

@@ -14,6 +14,7 @@ const Question = (props) => {
             setQuestion(data[0]);
             setQusNo(1);
             props.setQueId(data[0].id);
+            props.setOutput(null);
         }
     }, [data])
     return (
