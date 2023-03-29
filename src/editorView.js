@@ -1,8 +1,9 @@
 import Editor from "@monaco-editor/react";
 import { TrendingUpOutlined } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePageVisibility } from "react-page-visibility";
 import PageVisibility from "react-page-visibility/dist/umd/PageVisibility";
+
 
 
 const EditorView = (props) => {
@@ -14,7 +15,11 @@ const EditorView = (props) => {
     const handleEditorChange = (value) => {
         setCode(value);
     }
+    const editorRef = useRef(null);
 
+    function handleEditorDidMount(editor, monaco) {
+        editorRef.current = editor;
+    }
 
     useEffect(() => {
         setQuestion(props.qId);
@@ -46,6 +51,7 @@ const EditorView = (props) => {
                 return res.json();
             })
             .then(data => {
+                //console.log(data);
                 props.setOutput(data);
             })
             .catch(err => {
@@ -72,6 +78,7 @@ const EditorView = (props) => {
                     onChange={handleEditorChange}
                     automaticLayout={true}
                     value={questionCode}
+                    onMount={handleEditorDidMount}
 
                 />
             </div>

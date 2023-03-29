@@ -10,7 +10,6 @@ import Register from "./Register";
 import Signup from "./Signup";
 import CreateExam from "./createExam";
 import Box from '@mui/material/Box';
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -25,6 +24,10 @@ function App() {
     setQId(data);
   }
 
+  const setUser = (data) => {
+    setRole(data);
+  }
+
   const commonStyles = {
     bgcolor: 'background.paper',
     borderColor: 'text.primary',
@@ -35,6 +38,7 @@ function App() {
 
   const [output, setOutput] = useState(null);
   const [qId, setQId] = useState(null);
+  const [role, setRole] = useState(null);
   return (
     <Router>
       <div className="App">
@@ -57,16 +61,17 @@ function App() {
             </Route>
             <Route exact path="/exam">
               <Exam />
-            </Route>	      
-	      <Route exact path="/">
-		  <Login />
-		  </Route>
-              <Route exact path="/register" >
-		  <Register />
-	      </Route>
-	      <Route exact path="/signup" >
-		  <Signup />
-	      </Route>
+            </Route>
+            <Route exact path="/register" >
+              <Register setRole={setUser} />
+            </Route>
+            <Route exact path="/signup">
+              <Signup role={role} />
+            </Route>
+            <Route exact path="/">
+              <Login />
+            </Route>
+
           </Switch>
         </div>
 

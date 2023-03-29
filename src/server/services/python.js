@@ -12,6 +12,24 @@ const createnewFile = (data) => {
 }
 
 
+//formatting the error output
+const formatError = (out) => {
+    //find if its a syntax error or not
+    let result;
+    const isType = out.includes("TypeError");
+    const isAttribute = out.includes("AttributeError");
+    if (isType || isAttribute) {
+        //find the last index of a line
+        const lastLineIndex = out.lastIndexOf("Error")
+        result = { "syntax": false, "Error": out.substring(lastLineIndex, out.length) }
+    } else {
+        const lastErrorIndex = out.lastIndexOf("line")
+        result = { "syntax": true, "Error": out.substring(lastErrorIndex, out.length) }
+    }
+    return result;
+}
+
+
 const runcode = (filename, func, url, qid) => {
     fs.rename(__dirname + "/../" + filename, path.join(url[0].path, filename), function (err) {
         if (err) throw err
@@ -20,11 +38,13 @@ const runcode = (filename, func, url, qid) => {
     const command = `python ${url[0].path}/test.py`;
 
     exec(command, (err, stdout, stderr) => {
-        if (err) {
+        if (err || stderr) {
             console.log(`Error: ${err.message}`);
+            const output = formatError(err.message);
             func({
                 type: "Error",
-                data: err.message
+                errorType: output.syntax,
+                data: output.Error
             });
         } else if (stderr) {
             console.log(`stderr: ${stderr.message}`)

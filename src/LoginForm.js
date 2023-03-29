@@ -1,40 +1,96 @@
 import React, { useState } from 'react'
 import { Link } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css'
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme();
 
 const LoginForm = ({ Login }) => {
-  const [details, setDetails] = useState({ username: "", password: "" });
   const submitHandler = e => {
     e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const details = { "registerNo": data.get("Register Number"), "password": data.get("password") }
     Login(details);
+
   }
   return (
-    <article className="wrapper bg-dark d-flex align-items justify-content-center w-100">
-      {/* <img className="bgimg" src={require('./img/bg1.jpg')} /> */}
-      <section className="login rounded">
-        {/* <img className="icon1" src={require('./img/icon1.png')} /> */}
-        <form onSubmit={submitHandler}>
-          <div className='form-group mb-2'>
-            <input type="text" className="from-control w-100" name="username" id="username" placeholder="Username" autoComplete="off" onChange={e => setDetails({ ...details, username: e.target.value })} value={details.username} /><br />
-          </div>
-          <div className='form-group mb-2'>
-            <input type="password" className="from-control w-100" name="password" id="password" placeholder="Password" autoComplete="off" onChange={e => setDetails({ ...details, password: e.target.value })} value={details.password} /><br />
-          </div>
-          <div className='form-group mb-2'>
-            <button type='submit' className='btn btn-success w-100 mt-2'>SIGN IN</button>
-          </div>
-          <div className='form-group  from-check mb-2'>
-            <input type="checkbox" className='form-check-input'></input>
-            <label className='form-check-label'>Remember Me</label>
-          </div>
-        </form>
-        <div>
-          <Link to="/register">
-            <centre><p className="reg">Sign Up</p></centre>
-          </Link>
-        </div>
-      </section>
-    </article>
-  )
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={submitHandler} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="register number"
+              label="Register Number"
+              name="Register Number"
+              autoComplete="Register Number"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link to="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to="/register" variant="body2">
+                  Don't have an account? Sign Up"
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
 }
+
 export default LoginForm;

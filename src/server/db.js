@@ -65,20 +65,28 @@ const postQuestion = (data, pass, testconversion, func) => {
 }
 
 //for login and registration
-const retriveLogin = (func) => {
-    const sqlGet = "SELECT * FROM login";
-    pool.execute(sqlGet, (error, result) => {
-	if(error) throw error;
-	func(result);
-  });
+const retriveLogin = (no, func) => {
+    const sqlCommand = "SELECT password FROM login WHERE registerno = ?";
+    pool.execute(sqlCommand, [no], (error, result) => {
+        if (error) {
+            console.log("this is an error");
+            func(true, null);
+        } else {
+            func(false, result);
+        }
+    })
+
 }
 
-const postRegister = (username, password, isProfessor,func) => {
-    const sqlInsert = "INSERT INTO login (username, password, isProfessor) VALUES (?, ?, ?)";
-    pool.execute(sqlInsert, (error, result) => {
-
-	if(error) throw error;
-	func();
+const postRegister = (registerNo, firstname, lastname, email, password, isProfessor, func) => {
+    console.log(registerNo, firstname, lastname, email, password, isProfessor);
+    const sqlInsert = "INSERT INTO login (registerno, firstname, lastname,email,password,isProfessor) VALUES (?, ?, ?,?,?,?)";
+    pool.execute(sqlInsert, [registerNo, firstname, lastname, email, password, isProfessor], (error, result) => {
+        if (error) {
+            func(true);
+        } else {
+            func(false);
+        }
     })
 }
 

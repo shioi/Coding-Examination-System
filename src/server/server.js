@@ -5,9 +5,14 @@ const cors = require('cors');
 const dbms = require('./db');
 const crypto = require("crypto");
 const app = express();
+const bcrypt = require('bcrypt')
+const jwt = require("jsonwebtoken");
 const port = 4000;
 
-app.set('view engine', 'ejs');
+const createToken = (id) => {
+    return jwt.sign({ id }, process.env.SECRET, { expiresIn: '3d' });
+}
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors());
@@ -57,16 +62,39 @@ app.get('/question/:qid', (req, res) => {
 })
 
 
-app.get("/api/get/login", (req, res) => {
-    dbms.retriveLogin((result) => {
-	res.send(result);
+app.post("/api/post/login", async (req, res) => {
+    const { registerNo, password } = req.body;
+    dbms.retriveLogin(registerNo, (error, result) => {
+        if (error) {
+            res.status(200).json({ error: true, message: "Register Number does not exist" });
+        } else if (result.length === 0) {
+            res.status(200).json({ error: true, message: "Register Number does not exist" });
+        } else {
+            bcrypt.compare(password, result[0].password, (err, data) => {
+                if (err) throw error;
+                if (!data) {
+                    res.status(200).json({ error: true, message: "Wrong password" });
+                } else {
+                    const token = createToken(registerNo);
+                    res.status(200).json({ error: false, tok: token });
+                }
+            });
+        }
     })
 });
 
-app.post("/api/post/signup", (req, res) => {
-    const { username, password, isProfessor } = req.body;
-    dbms.postRegister(username, password, isProfessor, ()=>{
-	res.status(200);
+app.post("/api/post/signup", async (req, res) => {
+    const { registerNo, firstname, lastname, email, password, isProfessor } = req.body;
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password, salt)
+
+    dbms.postRegister(registerNo, firstname, lastname, email, hash, isProfessor, (error) => {
+        if (error) {
+            res.status(200).json({ error: true })
+        } else {
+            const token = createToken(registerNo);
+            res.status(200).json({ error: false, tok: token })
+        }
     })
 });
 

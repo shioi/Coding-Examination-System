@@ -1,87 +1,44 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { useState, useEffect } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import LoginForm from "./LoginForm";
 import axios from "axios";
+import Snackbar from '@mui/material/Snackbar';
+import { Alert } from '@mui/material';
 
 const Login = (props) => {
-  const [loginDetailsList, setLoginList] = useState([]);
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
 
-  const loadData1 = async () => {
-    const response = await axios.get('http://localhost:3001/api/get/login');
-    setLoginList(response.data);
-  }
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/api/get/login').then((response) => {
-      setLoginList(response.data);
-    });
-    loadData1();
-
-  }, []);
-
-  const [user, setUser] = useState({ username: "", password: "", isProfessor: -1 });
-  const [initial, setInitial] = useState(user.username ? true : false);
-
-  const notify1 = () => toast.success("Login Successful!");
-  const notify2 = () => toast.error("Invalid Credentials");
-
-  const Login = details => {
-    console.log(details);
-    if (!details.username || !details.password) {
-      toast.error("Please provide the inputs required");
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
     }
-    else {
-      let admit = false;
-      for (var i = 0; i < loginDetailsList.length; i++) {
-        if (loginDetailsList[i].username == details.username && loginDetailsList[i].password == details.password) {
-          console.log("Logged In");
-          setUser({
-            username: details.username,
-            password: details.password,
-            isProfessor: loginDetailsList[i].isProfessor,
-          });
-          admit = true;
-          break;
-        } else {
-          console.log("Details do not match");
-        }
-      }
-      console.log(admit);
-      if (admit) {
-        return notify1();
-      }
-      else {
-        return notify2();
-      }
-    }
+    setOpen(false);
   }
 
-  const location = useLocation();
-  console.log(props, " props");
-  console.log(location, " useLocation Hook");
-  const loginInitial = location.state?.loginInitial;
-  console.log(loginInitial);
-  console.log(initial);
-  if (initial == false && loginInitial == true) {
-    const fromtoLogin = location.state?.fromtoLogin;
-    setUser({
-      username: fromtoLogin.loginUsername,
-      password: fromtoLogin.loginPassword,
-    });
-    setInitial(true);
+
+  const logging = (details) => {
+    axios.post("http://localhost:4000/api/post/login", {
+      registerNo: details.registerNo,
+      password: details.password
+    }).then((response) => {
+      if (response.data.error) {
+        setMessage(response.data.message);
+        setOpen(true);
+      } else {
+
+      }
+    })
   }
 
-  console.log("Verify:" + user.isProfessor)
 
   return (
-    <div className="Login">
-      {(user.username != "") ? (
-        <div>
-          {(user.isProfessor == 0) ? (<h2>Student Welcome</h2>) : (<h2>Professor Welcome</h2>)}
-        </div>
-      ) : (<LoginForm Login={Login} />)}
+    <div>
+      <LoginForm Login={logging} />
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert severity="error" onClose={handleClose} sx={{ width: '100%' }}>{message}</Alert>
+      </Snackbar>
     </div>
   )
 }
