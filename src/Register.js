@@ -46,7 +46,7 @@ const Register = (props) => {
       </Grid>
       <Grid item xs={3}>
         <Card sx={{ maxWidth: 400, minHeight: 300 }}>
-          <CardActionArea onClick={() => { handleLink(0) }}>
+          <CardActionArea onClick={() => { handleLink(1) }}>
             <CardMedia
               component="img"
               height="300"

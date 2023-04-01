@@ -2,7 +2,7 @@ import { useState } from "react";
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-
+import { useAuthContext } from './useAuthContext';
 
 const CreateExam = () => {
     const [testInputFields, setTestInputFields] = useState([
@@ -25,6 +25,7 @@ const CreateExam = () => {
     const [password, setPassword] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+    const { user } = useAuthContext()
 
     const handleFormChange = (index, event) => {
         let data = [...testInputFields];
@@ -111,7 +112,7 @@ const CreateExam = () => {
         const url = "http://localhost:4000/postquestion";
         fetch(url, {
             method: 'POST',
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${user.token}` },
             body: JSON.stringify(finalsubmission)
         })
             .then(res => {
@@ -203,5 +204,7 @@ const CreateExam = () => {
         </div >
     );
 }
+
+//TODO: Make field for choosing stundets
 
 export default CreateExam;

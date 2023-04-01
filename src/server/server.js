@@ -9,13 +9,60 @@ const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken");
 const port = 4000;
 
-const createToken = (id) => {
-    return jwt.sign({ id }, process.env.SECRET, { expiresIn: '3d' });
+
+const createToken = (id, isProfessor) => {
+    return jwt.sign({ id, isProfessor }, process.env.SECRET, { expiresIn: '3d' });
 }
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors());
+
+app.post("/api/post/login", async (req, res) => {
+    const { registerNo, password } = req.body;
+    dbms.retriveLogin(registerNo, (error, result) => {
+        if (error) {
+            res.status(200).json({ error: true, message: "Register Number does not exist" });
+        } else if (result.length === 0) {
+            res.status(200).json({ error: true, message: "Register Number does not exist" });
+        } else {
+            bcrypt.compare(password, result[0].password, (err, data) => {
+                if (err) throw error;
+                if (!data) {
+                    res.status(400).json({ message: "Wrong password" });
+                } else {
+                    dbms.getType(registerNo, (result) => {
+                        const isProf = result[0].isProfessor
+                        const token = createToken(registerNo, result[0].isProfessor);
+                        res.status(200).json({ registerNo, token, isProf });
+                    })
+                }
+            });
+        }
+    })
+});
+
+app.post("/api/post/signup", async (req, res) => {
+    const { registerNo, firstname, lastname, email, password, isProfessor } = req.body;
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password, salt)
+
+    dbms.postRegister(registerNo, firstname, lastname, email, hash, isProfessor, (error) => {
+        if (error) {
+            res.status(400).json({ 'error': true });
+        } else {
+            const token = createToken(registerNo, isProfessor);
+            res.status(200).json({ registerNo, token, 'isProf': isProfessor })
+        }
+    })
+});
+
+
+//ensure authentication
+const requireAuth = require('./requireAuth')
+app.use(requireAuth);
+
 
 
 app.get("/", (req, res) => {
@@ -48,6 +95,10 @@ app.post('/postquestion', async (req, res) => {
 })
 
 app.get('/getexams', (req, res) => {
+    if (req.user.isProfessor === 1) {
+        console.log("cannot access")
+        res.status(401).json({ error: "cannot access" });
+    }
     dbms.getExams((result) => {
         res.status(200).json(result);
     });
@@ -62,41 +113,6 @@ app.get('/question/:qid', (req, res) => {
 })
 
 
-app.post("/api/post/login", async (req, res) => {
-    const { registerNo, password } = req.body;
-    dbms.retriveLogin(registerNo, (error, result) => {
-        if (error) {
-            res.status(200).json({ error: true, message: "Register Number does not exist" });
-        } else if (result.length === 0) {
-            res.status(200).json({ error: true, message: "Register Number does not exist" });
-        } else {
-            bcrypt.compare(password, result[0].password, (err, data) => {
-                if (err) throw error;
-                if (!data) {
-                    res.status(200).json({ error: true, message: "Wrong password" });
-                } else {
-                    const token = createToken(registerNo);
-                    res.status(200).json({ error: false, tok: token });
-                }
-            });
-        }
-    })
-});
-
-app.post("/api/post/signup", async (req, res) => {
-    const { registerNo, firstname, lastname, email, password, isProfessor } = req.body;
-    const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(password, salt)
-
-    dbms.postRegister(registerNo, firstname, lastname, email, hash, isProfessor, (error) => {
-        if (error) {
-            res.status(200).json({ error: true })
-        } else {
-            const token = createToken(registerNo);
-            res.status(200).json({ error: false, tok: token })
-        }
-    })
-});
 
 
 app.listen(port, () => {

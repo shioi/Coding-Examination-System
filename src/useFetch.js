@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 
-const useFetch = (url) => {
+const useFetch = (url, user) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     useEffect(() => {
         const abortCont = new AbortController();
-        fetch(url, { signal: abortCont.signal })
+        fetch(url, {
+            signal: abortCont.signal,
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        })
             .then(res => {
                 if (!res.ok) {
                     throw Error("Could not load data");

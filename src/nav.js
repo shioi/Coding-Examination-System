@@ -1,13 +1,27 @@
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import { useLogout } from './useLogout';
+import { useAuthContext } from './useAuthContext';
+
 const Navigation = () => {
+    const { logout } = useLogout();
+    const { user } = useAuthContext()
+    const handleClick = () => {
+        logout()
+    }
+
     return (
         <nav>
             <ul>
-                <li><Link to='/exam'>Exams</Link></li>
-                <li><Link to='/forum'>Forum</Link></li>
+                {user.isProf === 0 && <li><Link to='/'>Exams</Link></li>}
                 <li><Link to='/account'>Account</Link></li>
-                <li><Link to='/createExam'>Create Exam</Link></li>
+                {user.isProf === 1 && <li><Link to='/createExam'>Create Exam</Link></li>}
             </ul>
+            <div>
+                {user && (
+                    <Button variant="contained" onClick={handleClick}>Logout</Button>
+                )}
+            </div>
         </nav >
 
     );

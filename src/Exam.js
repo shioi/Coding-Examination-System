@@ -1,6 +1,9 @@
 import useFetch from './useFetch';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { useAuthContext } from './useAuthContext';
+import { useEffect } from 'react';
+
 const Exam = () => {
     const commonStyles = {
         bgcolor: 'background.paper',
@@ -8,7 +11,9 @@ const Exam = () => {
         m: 1,
         border: 3,
     };
-    const { data, isLoading, error } = useFetch('http://localhost:4000/getExams');
+    const { user } = useAuthContext()
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { data, isLoading, error } = useFetch('http://localhost:4000/getExams', user);
     return (
         <div className="exam">
             <h1>Current Exams</h1>

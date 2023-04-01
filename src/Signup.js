@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+import { InputLabel, Select, MenuItem } from '@mui/material';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
+import { useAuthContext } from './useAuthContext';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 const Signup = (props) => {
@@ -21,9 +23,11 @@ const Signup = (props) => {
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
-
+  const [clas, setClas] = useState('');
+  const { dispatch } = useAuthContext();
   useEffect(() => {
     setIsProfessor(props.role)
+
   }, [props])
 
   const theme = createTheme();
@@ -49,28 +53,44 @@ const Signup = (props) => {
   }
 
 
+
+  const handleChange = (event) => {
+    setClas(event.target.value);
+  };
+
+  //TODO: making Register.js and Signup.js in same page 
   const register = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
+    console.log(data)
+    console.log(isProfessor)
     axios.post("http://localhost:4000/api/post/signup", {
       firstname: data.get("firstName"),
       lastname: data.get("lastName"),
       registerNo: data.get("Register Number"),
       email: data.get("email"),
       password: data.get("password"),
+      clas: clas,
       isProfessor: isProfessor,
     }).then((response) => {
-      if (response.data.error) {
+      setIsError(false);
+      setMessage("Account created successfully");
+      setOpen(true);
+      //save the user to local storage
+      localStorage.setItem('user', JSON.stringify(response.data))
+      //update the auth context
+      dispatch({ type: 'LOGIN', payload: response })
+      return <Redirect to='/' />
+    })
+      .catch((err) => {
+        console.log("here")
         setIsError(true);
         setMessage("User already exists");
         setOpen(true);
-      } else {
-        setIsError(false);
-        setMessage("Account created successfully");
-        setOpen(true);
-      }
-    })
+
+      })
   }
+
 
   return (
     <div className="main">
@@ -113,7 +133,7 @@ const Signup = (props) => {
                     autoComplete="family-name"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     required
                     fullWidth
@@ -122,6 +142,23 @@ const Signup = (props) => {
                     name="Register Number"
                     autoComplete="Register Number"
                   />
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                  <InputLabel id="demo-simple-select-label">Class</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={clas}
+                    label="Class"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={"MCA-A"}>MCA-A</MenuItem>
+                    <MenuItem value={"MCA-B"}>MCA-B</MenuItem>
+                    <MenuItem value={"BCA-A"}>BCA-A</MenuItem>
+                    <MenuItem value={"BCA-B"}>BCA-B</MenuItem>
+                    <MenuItem value={"BCA-B"}>CMS</MenuItem>
+                    <MenuItem value={"BCA-B"}>CME</MenuItem>
+                  </Select>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField

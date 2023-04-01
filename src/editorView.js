@@ -3,28 +3,27 @@ import { TrendingUpOutlined } from "@mui/icons-material";
 import { useState, useEffect, useRef } from "react";
 import { usePageVisibility } from "react-page-visibility";
 import PageVisibility from "react-page-visibility/dist/umd/PageVisibility";
+import { useAuthContext } from './useAuthContext';
 
 
 
 const EditorView = (props) => {
     const [language, setLanguage] = useState('python');
+    const { user } = useAuthContext()
     const [code, setCode] = useState(null);
     const [question, setQuestion] = useState(null);
-    const [questionCode, setQuestionCode] = useState(null);
     const [isActive, setIsActive] = useState(null);
     const handleEditorChange = (value) => {
         setCode(value);
     }
-    const editorRef = useRef(null);
-
-    function handleEditorDidMount(editor, monaco) {
-        editorRef.current = editor;
-    }
-
     useEffect(() => {
         setQuestion(props.qId);
         setIsActive(true);
-    }, [props])
+        //TODO: send the code to the server for the question and save it
+        //TODO: fetch the code for the selected question and set it in setCode()
+        setCode(null);
+    }, [props.qId])
+
 
     const handleVisibilityChange = (visibility) => {
         setIsActive(!visibility);
@@ -33,7 +32,6 @@ const EditorView = (props) => {
 
     const submitCode = (code, language) => {
         const url = "http://localhost:4000/postcode";
-        console.log(question);
         const finalcode = {
             lang: language,
             content: code,
@@ -41,7 +39,7 @@ const EditorView = (props) => {
         };
         fetch(url, {
             method: 'POST',
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${user.token}` },
             body: JSON.stringify(finalcode)
         })
             .then(res => {
@@ -77,9 +75,7 @@ const EditorView = (props) => {
                     language={language}
                     onChange={handleEditorChange}
                     automaticLayout={true}
-                    value={questionCode}
-                    onMount={handleEditorDidMount}
-
+                    value={code}
                 />
             </div>
             <div className="submit-button">

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
 import useFetch from './useFetch';
+import { useAuthContext } from './useAuthContext';
 
 const Question = (props) => {
     const { qid } = useParams();
-    const { data, isLoading, error } = useFetch(`http://localhost:4000/question/${qid}`);
+    const { user } = useAuthContext()
+    const { data, isLoading, error } = useFetch(`http://localhost:4000/question/${qid}`, user);
     const [question, setQuestion] = useState(null);
     const [numOfQuestion, setNumOfQuestion] = useState(null);
     const [qusNo, setQusNo] = useState(null);

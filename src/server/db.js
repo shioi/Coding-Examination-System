@@ -90,5 +90,13 @@ const postRegister = (registerNo, firstname, lastname, email, password, isProfes
     })
 }
 
-module.exports = { getExams, getQuestion, findTestCase, postQuestion, insertTestCase, retriveLogin, postRegister };
+const getType = (registerNo, func) => {
+    const sql = `select isProfessor from login where registerno=${registerNo}`;
+    pool.execute(sql, (error, result) => {
+        if (error) throw error;
+        func(result);
+    })
+}
+
+module.exports = { getExams, getQuestion, findTestCase, postQuestion, insertTestCase, retriveLogin, postRegister, getType };
 

@@ -1,5 +1,6 @@
 import Navigation from "./nav";
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { useAuthContext } from "./useAuthContext";
 import Question from "./question";
 import EditorView from "./editorView";
 import Output from "./Output";
@@ -14,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
+  const { user } = useAuthContext()
   const sendOutput = (data) => {
     //console.log(data)
     setOutput(data);
@@ -42,12 +44,13 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navigation />
+        {user && <Navigation />}
         <div className='content'>
           <Switch>
             <Route exact path="/question/:qid">
               <Box className="main" >
                 <Box className="main-side" sx={{ display: 'flex', ...commonStyles, width: 800 }}>
+                  {!user && <Redirect to="/login" />}
                   <Question setQueId={setQueId} setOutput={sendOutput} />
                   <Output out={output} />
                 </Box>
@@ -57,10 +60,10 @@ function App() {
               </Box>
             </Route>
             <Route exact path="/createExam">
-              <CreateExam />
+              {user && user.isProf === 1 ? <CreateExam /> : <Redirect to='/login' />}
             </Route>
-            <Route exact path="/exam">
-              <Exam />
+            <Route exact path="/login">
+              {user ? <Redirect to='/' /> : <Login />}
             </Route>
             <Route exact path="/register" >
               <Register setRole={setUser} />
@@ -69,9 +72,8 @@ function App() {
               <Signup role={role} />
             </Route>
             <Route exact path="/">
-              <Login />
+              {(user && user.isProf === 1 && <Redirect to='createExam' />) || (user ? <Exam /> : <Redirect to='/login' />)}
             </Route>
-
           </Switch>
         </div>
 
