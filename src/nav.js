@@ -12,14 +12,19 @@ const Navigation = () => {
 
     return (
         <nav>
-            <ul>
-                {user.isProf === 0 && <li><Link to='/'>Exams</Link></li>}
-                <li><Link to='/account'>Account</Link></li>
-                {user.isProf === 1 && <li><Link to='/createExam'>Create Exam</Link></li>}
-            </ul>
+            {user.isProf === 0 && <div>
+                <ul>
+                    <li><Link to='/'>Upcoming Exams</Link></li>
+                    <li><Link to='/account'>Account</Link></li>
+                    <li><Link to='/ongoingexam'>Ongoing Exams</Link></li>
+                    <li><Link to='/pastexam'>Past Exams</Link></li>
+                </ul>
+            </div>
+            }
             <div>
-                {user && (
+                {user && !user.isProf && (
                     <Button variant="contained" onClick={handleClick}>Logout</Button>
+
                 )}
             </div>
         </nav >
@@ -28,3 +33,5 @@ const Navigation = () => {
 }
 
 export default Navigation;
+
+

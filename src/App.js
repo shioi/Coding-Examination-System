@@ -12,6 +12,12 @@ import Signup from "./Signup";
 import CreateExam from "./createExam";
 import Box from '@mui/material/Box';
 import "react-toastify/dist/ReactToastify.css";
+import Conductexam from "./conductexam";
+import ExamTimer from "./ExamTimer";
+import PastExams from "./pastexam";
+import OngoingExam from "./ongoing";
+import TeacherDashboard from "./TeacherDashboard";
+import MonitorExam from "./MonitorExam";
 
 
 function App() {
@@ -30,6 +36,11 @@ function App() {
     setRole(data);
   }
 
+  const setExam = (data) => {
+    console.log(data)
+    setExamId(data);
+  }
+
   const commonStyles = {
     bgcolor: 'background.paper',
     borderColor: 'text.primary',
@@ -40,6 +51,7 @@ function App() {
 
   const [output, setOutput] = useState(null);
   const [qId, setQId] = useState(null);
+  const [examid, setExamId] = useState(null);
   const [role, setRole] = useState(null);
   return (
     <Router>
@@ -51,8 +63,12 @@ function App() {
               <Box className="main" >
                 <Box className="main-side" sx={{ display: 'flex', ...commonStyles, width: 800 }}>
                   {!user && <Redirect to="/login" />}
+                  <ExamTimer
+                    id={examid}
+                  />
                   <Question setQueId={setQueId} setOutput={sendOutput} />
                   <Output out={output} />
+
                 </Box>
                 <Box className="editor" sx={{ display: 'flex', ...commonStyles, width: 800 }}>
                   <EditorView setOutput={sendOutput} qId={qId} />
@@ -60,7 +76,7 @@ function App() {
               </Box>
             </Route>
             <Route exact path="/createExam">
-              {user && user.isProf === 1 ? <CreateExam /> : <Redirect to='/login' />}
+              {user && user.isProf === 1 ? <Conductexam /> : <Redirect to='/login' />}
             </Route>
             <Route exact path="/login">
               {user ? <Redirect to='/' /> : <Login />}
@@ -72,7 +88,16 @@ function App() {
               <Signup role={role} />
             </Route>
             <Route exact path="/">
-              {(user && user.isProf === 1 && <Redirect to='createExam' />) || (user ? <Exam /> : <Redirect to='/login' />)}
+              {(user && user.isProf === 1 && <TeacherDashboard />) || (user ? <Exam setExamId={setExam} /> : <Redirect to='/login' />)}
+            </Route>
+            <Route exact path='/ongoingexam'>
+              <OngoingExam setExamId={setExam} />
+            </Route>
+            <Route exact path='/pastexam'>
+              <PastExams setExamId={setExam} />
+            </Route>
+            <Route exact path="/monitor/:eid">
+              <MonitorExam />
             </Route>
           </Switch>
         </div>

@@ -29,45 +29,72 @@ const formatError = (out) => {
     return result;
 }
 
+//iteration over solved
+const findSolved = (url) => {
+    let solvedData;
+    try {
+        const data = fs.readFileSync(url,
+            { encoding: 'utf8', flag: 'r' });
+        solvedData = data.split('\n');
+    } catch (err) {
+        solvedData = null;
+    }
 
-const runcode = (filename, func, url, qid) => {
+    return solvedData;
+}
+
+
+const runcode = async (filename, func, url, qid, userid) => {
     fs.rename(__dirname + "/../" + filename, path.join(url[0].path, filename), function (err) {
         if (err) throw err
     })
 
     const command = `python ${url[0].path}/test.py`;
 
-    exec(command, (err, stdout, stderr) => {
+    exec(command, async (err, stdout, stderr) => {
+        //iterate over solved.txt
+        const solvedData = findSolved(`${url[0].path}/solved.txt`);
+        const totalProbSolved = {
+            'total': solvedData[0].substring(solvedData[0].lastIndexOf(':') + 1),
+            'solved': solvedData[1].substring(solvedData[1].lastIndexOf(':') + 1)
+        }
+        console.log(totalProbSolved)
         if (err || stderr) {
             console.log(`Error: ${err.message}`);
             const output = formatError(err.message);
             func({
                 type: "Error",
                 errorType: output.syntax,
-                data: output.Error
+                data: output.Error,
+                totalTestPassed: totalProbSolved
             });
         } else if (stderr) {
             console.log(`stderr: ${stderr.message}`)
             func({
                 type: "Error",
-                data: err.message
+                data: err.message,
+                totalTestPassed: totalProbSolved
             });
         } else {
+            if (totalProbSolved['total'] === totalProbSolved['solved']) {
+                await dbms.updateMarks(userid, qid)
+            }
             func({
                 type: "Success",
                 data: stdout,
                 qid: qid,
+                totalTestPassed: totalProbSolved
             });
 
         }
     })
 }
 
-const runPython = (data, qid, func) => {
+const runPython = (data, qid, userid, func) => {
     console.log(qid);
     const file = createnewFile(data);
     //const command = "python " + file;
-    dbms.findTestCase(file, qid, runcode, func);
+    dbms.findTestCase(file, qid, userid, runcode, func);
     //runcode(command, func);
 }
 

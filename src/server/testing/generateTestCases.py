@@ -28,9 +28,14 @@ def return_tab(times):
 
 #all the boilereplate code goes here
 def write_boilerplate_head():
-    code = f"""import file as n\nfrom ast import literal_eval\nimport sys\nfrom difflib import Differ\nimport os\n"""
+    code = f"""import file as n\nfrom ast import literal_eval\nimport sys\nfrom difflib import Differ\nimport os\nimport sys\nsolved=0\n"""
     with open(testFileName, "a") as f:
         f.write(code)    
+
+def write_totaltestcase(total):
+    code = f"total={total}\n"
+    with open(testFileName,"a") as f:
+        f.write(code)
 
 
 #creating the assert test function
@@ -68,23 +73,26 @@ def write_function_calls():
         for tst in test_functions:
             code = tst+"()"
             prevalidation = f"print('for {code}')\n"
-            code_validation = f"if({code}):\n{return_tab(1)}print('----test case passed')\nelse:\n{return_tab(1)}print('failed!! ')\n"
+            code_validation = f"if({code}):\n{return_tab(1)}print('-------test case passed-------')\n{return_tab(1)}solved+=1\nelse:\n{return_tab(1)}print('failed!! ')\n"
             f.write(prevalidation)
             f.write(code_validation)
+    
 
     
 
-#calling all the functions
+#calling all the functions\
 test_functions = []
 
 #parsing json and creating code
 def parse_and_create():
+    l=0
     functions = json.load(jsonFile)
     for func in functions:
         print(func)
         i=0    
         fname = func["functionName"]
         for test in func["tests"]:
+            l+=1
             i+=1
             inp = ""
             for input in test["Inputs"]:
@@ -94,10 +102,22 @@ def parse_and_create():
                 create_test(fname,inp,out,i)
             elif(func["type"] == "output"):
                 create_test_output(fname,inp,out+"\n",i)
+    
+    write_totaltestcase(l)
+    
 
-
+def writeLastLine():
+    code = f"with open(sys.path[0]+'/solved.txt','w') as f:\n"
+    code1 = f"{return_tab(1)}f.write('Total:'+str(total))\n"
+    code2 = f"{return_tab(1)}f.write('\\nSolved:'+str(solved))\n"
+    with open(testFileName, "a") as f:
+        f.write(code)
+        f.write(code1)
+        f.write(code2)
 
 
 write_boilerplate_head()
 parse_and_create()
 write_function_calls()
+writeLastLine()
+

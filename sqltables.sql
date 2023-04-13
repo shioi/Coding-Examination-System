@@ -11,20 +11,29 @@ password varchar(200),
 examstatus varchar(200),
 Date datetime
 );
+desc exams;
+ALTER TABLE exams
+  ADD COLUMN author varchar(200),
+  ADD FOREIGN KEY exams(author) REFERENCES login(registerno);
+  
+update exams set author="2247102";
+select * from exams;
 
 
 insert into exams values
 (101,"Python Programming", 120, 50, "here", "upcoming","2022-03-30 14:00:00");
 create table Question (
 id varchar(30) PRIMARY KEY,
-Question NVARCHAR(8000)
+Question NVARCHAR(8000),
+Marks int
 );
 
 create table Question(
 id varchar(40) PRIMARY KEY,
 Question nvarchar(8000)
 );
-drop table Question;
+desc Question;
+alter table Question modify column Marks INT NOT NULL;
 
 insert into Question values
 ("2022MCA171CAT1", "You are travelling to an institution situated in Mumbai by flight for taking part in
@@ -138,6 +147,8 @@ show tables;
 desc TestCases;
 desc exams;
 
+
+
 truncate table exams;
 truncate table Question;
 truncate table ExamQuestion;
@@ -169,18 +180,53 @@ create table examtakingstudent (
 registerno varchar(200),
 examid varchar(30),
 status varchar(20),
+marks int,
 FOREIGN KEY(registerno) references login(registerno),
 FOREIGN KEY(examid) references exams(id)
 );
+
+drop table examtakingstudent;
+
+select * from examtakingstudent;
+select * from Question;
 
 #storing user code for each question
 create table usercode(
 registerno varchar(200),
 qid varchar(40),
 codeval nvarchar(8000),
+status varchar(50),
 foreign key(registerno) references login(registerno),
 foreign key(qid) references Question(id)
 );
+desc usercode;
 
+#student status
+create table userexamstatus(
+id int PRIMARY KEY AUTO_INCREMENT,
+registerno varchar(30),
+examid varchar(30),
+remaining_time int,
+FOREIGN KEY(registerno) references login(registerno),
+FOREIGN KEY(examid) references exams(id)
+);
+desc userexamstatus;
+select * from exams;
+select * from userexamstatus;
+update userexamstatus set remaining_time=10 where id=4;
 
+show tables;
+select * from Question;
+truncate userexamstatus;
+
+SET FOREIGN_KEY_CHECKS=1;
+select * from TestCases;
+select * from login;
+
+select * from exams;
+
+SELECT * from exams WHERE id in( select examid from examtakingstudent where registerno=2247123 && status="Done");
+select * from login;
+select * from login where registerno in (select registerno from examtakingstudent where examid="CAT-3-2023-04-13");
+select * from exams;
 

@@ -1,31 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { useAuthContext } from './useAuthContext';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import { shadows } from '@mui/system';
+import { Divider } from "@mui/material";
 
-const CreateExam = () => {
-    const [testInputFields, setTestInputFields] = useState([
-        {
-            Question: '',
-            Functions: [{
-                functionName: '',
-                Type: 'value',
-                TestCases: [{
-                    Input: '',
-                    Output: ''
-                }]
-            }]
-        }
-    ]);
-    const [examName, setExamName] = useState('');
-    const [subject, setSubject] = useState('');
-    const [duration, setDuration] = useState('');
-    const [totalMarks, setTotalMarks] = useState('');
-    const [password, setPassword] = useState('');
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
+
+
+const CreateExam = (props) => {
+
     const { user } = useAuthContext()
+    const {
+        examName,
+        subject,
+        duration,
+        totalMarks,
+        password,
+        date,
+        time,
+        testInputFields,
+        setTestInputFields,
+        setExamName,
+        setSubject,
+        setDuration,
+        setTotalMarks,
+        setPassword,
+        setDate,
+        setTime,
+        next,
+    } = props
+
 
     const handleFormChange = (index, event) => {
         let data = [...testInputFields];
@@ -94,113 +101,131 @@ const CreateExam = () => {
         setTestInputFields(data);
     }
 
-    const submit = (e) => {
-        e.preventDefault();
-        console.log(testInputFields);
-        const id = examName + "-" + date;
-        const finalsubmission = {
-            id: id,
-            name: examName,
-            duration: duration,
-            totalMarks: totalMarks,
-            password: password,
-            examstatus: "upcoming",
-            Date: date,
-            Time: time,
-            Questions: testInputFields,
-        }
-        const url = "http://localhost:4000/postquestion";
-        fetch(url, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${user.token}` },
-            body: JSON.stringify(finalsubmission)
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw Error("Error occured");
-                }
-            })
-            .catch(err => {
-                console.log(err.message);
-            })
-    }
+
 
     return (
         <div className="questionForm">
+            <div>
+            </div>
             <h1>Conduct Exam</h1>
-            <Box component="form" onSubmit={submit}>
-                <TextField label="name" name="name" value={examName} onChange={event => setExamName(event.target.value)} />
-                <TextField name="Subject" type="text" label="Subject" value={subject} onChange={event => setSubject(event.target.value)} />
-                <TextField name="totalMarks" label="Total Marks" value={totalMarks} onChange={event => setTotalMarks(event.target.value)} />
-                <TextField name="password" label="Exam Password" value={password} onChange={event => setPassword(event.target.value)} />
-                <TextField name="Date" InputLabelProps={{ shrink: true, required: true }} type="date" label="Date" value={date} onChange={event => setDate(event.target.value)} />
-                <TextField name="Time" InputLabelProps={{ shrink: true, required: true }} type="time" label="Time" value={time} onChange={event => setTime(event.target.value)} />
-                <TextField name="duration" label="Duration" value={duration} onChange={event => setDuration(event.target.value)} />
-                {testInputFields.map((input, index) => {
-                    return (
-                        <div key={index}>
-                            <h3>Question No: {index + 1}</h3>
-                            <TextareaAutosize
-                                maxRows={900}
-                                style={{ width: 500 }}
-                                name="Question"
-                                placeholder="Question"
-                                value={input.Question}
-                                onChange={event => handleFormChange(index, event)}
-                            />
-                            {input["Functions"].map((func, index2) => {
-                                return (
-                                    <div key={index2}>
-                                        <TextField
-                                            name="functionName"
-                                            placeholder="Function Name"
-                                            value={func.functionName}
-                                            onChange={event => handleFuncFormChange(index, index2, event)}
-                                        />
-                                        <select name="Type" onChange={(event) => handleFuncFormChange(index, index2, event)}>
-                                            <option value="value">value</option>
-                                            <option value="output">output</option>
-                                        </select>
-                                        {func["TestCases"].map((cases, index3) => {
-                                            return (
-                                                <div key={index3}>
-                                                    <TextField
-                                                        name="Input"
-                                                        placeholder="Test Input"
-                                                        value={cases.Input}
-                                                        onChange={event => handleTestFormChange(index, index2, index3, event)}
-                                                    />
+            <Box component="form">
+                <Grid
+                    container
+                    direction="column"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={8}
+                >
+                    <Grid item container spacing={2} direction="column" alignItems="center"
+                    >
+                        <Grid item xs={4}>
+                            <TextField label="name" name="name" value={examName} onChange={event => setExamName(event.target.value)} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField name="Subject" type="text" label="Subject" value={subject} onChange={event => setSubject(event.target.value)} />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField name="totalMarks" label="Total Marks" value={totalMarks} onChange={event => setTotalMarks(event.target.value)} />
+                        </Grid>
 
-                                                    <TextField
-                                                        name="Output"
-                                                        placeholder="Test Output"
-                                                        value={cases.Output}
-                                                        onChange={event => handleTestFormChange(index, index2, index3, event)}
-                                                    />
-                                                    <button onClick={() => { deleteField(index, index2) }} type="button">Delete Test</button>
-                                                </div>
+                        <Grid item xs={3}>
+                            <TextField name="password" label="Exam Password" value={password} onChange={event => setPassword(event.target.value)} />
+                        </Grid>
+                    </Grid>
+                    <Divider />
+                    <Grid item container xs={8} justifyContent="center">
+                        <Grid item xs={3}>
+                            <TextField name="Date" InputLabelProps={{ shrink: true, required: true }} type="date" label="Date" value={date} onChange={event => setDate(event.target.value)} />
+                        </Grid>
 
-                                            )
-                                        })}
+                        <Grid item xs={3}>
+                            <TextField name="Time" InputLabelProps={{ shrink: true, required: true }} type="time" label="Time" value={time} onChange={event => setTime(event.target.value)} />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <TextField name="duration" label="Duration" value={duration} onChange={event => setDuration(event.target.value)} />
+                        </Grid>
+                    </Grid>
 
-                                        <button onClick={() => { addFields(index, index2) }} type="button">Add Test Cases</button>
-                                        <button onClick={() => { deleteFunction(index, index2) }} type="button">Delete Function</button>
-                                    </div>
-                                )
-                            })}
-                            <button onClick={() => { addFunction(index) }} type="button">Add Function</button>
-                            < button onClick={() => { deleteQuestion(index) }} type="button">Delete Question</button>
+                    {testInputFields.map((input, index) => {
+                        return (
+                            <Grid container item spacing={2} justifyContent="center" direction="column" xs={10}
+
+                                key={index}
+                            >
+                                <h3>Question No: {index + 1}</h3>
+                                <TextareaAutosize
+                                    maxRows={900}
+                                    style={{ width: 500 }}
+                                    name="Question"
+                                    placeholder="Question"
+                                    value={input.Question}
+                                    onChange={event => handleFormChange(index, event)}
+                                />
+                                <TextField
+                                    name="Marks"
+                                    placeholder="Marks"
+                                    value={input.Marks}
+                                    onChange={event => handleFormChange(index, event)}
+                                />
+                                {input["Functions"].map((func, index2) => {
+                                    return (
+
+                                        <div key={index2}>
+                                            <TextField
+                                                name="functionName"
+                                                placeholder="Function Name"
+                                                value={func.functionName}
+                                                onChange={event => handleFuncFormChange(index, index2, event)}
+                                            />
+                                            <select name="Type" onChange={(event) => handleFuncFormChange(index, index2, event)}>
+                                                <option value="value">value</option>
+                                                <option value="output">output</option>
+                                            </select>
+                                            {func["TestCases"].map((cases, index3) => {
+                                                return (
+                                                    <div key={index3}>
+                                                        <TextField
+                                                            name="Input"
+                                                            placeholder="Test Input"
+                                                            value={cases.Input}
+                                                            onChange={event => handleTestFormChange(index, index2, index3, event)}
+                                                        />
+
+                                                        <TextField
+                                                            name="Output"
+                                                            placeholder="Test Output"
+                                                            value={cases.Output}
+                                                            onChange={event => handleTestFormChange(index, index2, index3, event)}
+                                                        />
+                                                        <button onClick={() => { deleteField(index, index2) }} type="button">Delete Test</button>
+                                                    </div>
+
+                                                )
+                                            })}
 
 
-                        </div>
 
-                    )
+                                            <button onClick={() => { addFields(index, index2) }} type="button">Add Test Cases</button>
+                                            <button onClick={() => { deleteFunction(index, index2) }} type="button">Delete Function</button>
+                                        </div>
+                                    )
+                                })}
 
-                })}
-                <button onClick={addQuestion} type="button">Add Question</button>
+                                <button onClick={() => { addFunction(index) }} type="button">Add Function</button>
+                                < button onClick={() => { deleteQuestion(index) }} type="button">Delete Question</button>
 
-                <button onClick={submit}>Submit</button>
+
+                            </Grid>
+
+                        )
+
+                    })}
+                    <button onClick={addQuestion} type="button">Add Question</button>
+
+                    <button onClick={next}>Next</button>
+                </Grid>
             </Box>
+
         </div >
     );
 }

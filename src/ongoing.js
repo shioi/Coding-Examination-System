@@ -5,7 +5,7 @@ import { useAuthContext } from './useAuthContext';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
 
-const Exam = (props) => {
+const OngoingExam = (props) => {
     const history = useHistory();
     const commonStyles = {
         bgcolor: 'background.paper',
@@ -15,7 +15,7 @@ const Exam = (props) => {
     };
     const { user } = useAuthContext()
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { data, isLoading, error } = useFetch('http://localhost:4000/getExams', user);
+    const { data, isLoading, error } = useFetch('http://localhost:4000/getongoingexam', user);
 
     const handleButtonClick = (data) => {
         console.log(data)
@@ -26,7 +26,7 @@ const Exam = (props) => {
 
     return (
         <div className="exam">
-            <h1>Upcoming Exams</h1>
+            <h1>Current Exams</h1>
             {error && <div>{error}</div>}
             {isLoading && <div>Loading ...</div>}
             {data && data.map((question, index) => {
@@ -39,6 +39,8 @@ const Exam = (props) => {
                                 <p>Total Marks: {question.totalMarks}</p>
                                 <p>Status: {question.examstatus}</p>
                                 <p>Date: {question.Date}</p>
+                                <button onClick={() => handleButtonClick(question.id)}>Attempt</button>
+
                             </li>
                         </ul>
                     </Box>
@@ -48,4 +50,4 @@ const Exam = (props) => {
     );
 }
 
-export default Exam;
+export default OngoingExam;
