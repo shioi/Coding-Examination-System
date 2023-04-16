@@ -229,4 +229,7 @@ SELECT * from exams WHERE id in( select examid from examtakingstudent where regi
 select * from login;
 select * from login where registerno in (select registerno from examtakingstudent where examid="CAT-3-2023-04-13");
 select * from exams;
+select * from examtakingstudent;
+update examtakingstudent set status="not-attempted" where registerno="2247123" and examid="neexam-2023-04-13";
 
+select * from userexamstatus;

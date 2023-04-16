@@ -18,6 +18,9 @@ import PastExams from "./pastexam";
 import OngoingExam from "./ongoing";
 import TeacherDashboard from "./TeacherDashboard";
 import MonitorExam from "./MonitorExam";
+import SplitterLayout from "react-splitter-layout";
+import "react-splitter-layout/lib/index.css";
+
 
 
 function App() {
@@ -60,20 +63,24 @@ function App() {
         <div className='content'>
           <Switch>
             <Route exact path="/question/:qid">
-              <Box className="main" >
-                <Box className="main-side" sx={{ display: 'flex', ...commonStyles, width: 800 }}>
-                  {!user && <Redirect to="/login" />}
-                  <ExamTimer
-                    id={examid}
-                  />
-                  <Question setQueId={setQueId} setOutput={sendOutput} />
-                  <Output out={output} />
+              <SplitterLayout>
+                <Box className="my-pane">
+                  <div className="pane-content">
+                    {!user && <Redirect to="/login" />}
+                    <ExamTimer
+                      id={examid}
+                    />
+                    <Question setQueId={setQueId} setOutput={sendOutput} />
+                    <Output out={output} />
+                  </div>
+                </Box>
+                <Box className="my-pane">
+                  <div className="pane-content"  >
+                    <EditorView setOutput={sendOutput} qId={qId} />
+                  </div>
+                </Box>
 
-                </Box>
-                <Box className="editor" sx={{ display: 'flex', ...commonStyles, width: 800 }}>
-                  <EditorView setOutput={sendOutput} qId={qId} />
-                </Box>
-              </Box>
+              </SplitterLayout>
             </Route>
             <Route exact path="/createExam">
               {user && user.isProf === 1 ? <Conductexam /> : <Redirect to='/login' />}

@@ -1,7 +1,13 @@
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
 import { useLogout } from './useLogout';
 import { useAuthContext } from './useAuthContext';
+import { AppBar, Toolbar, IconButton, Typography, Stack, Button, Menu, MenuItem, ListItemIcon, Divider } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Logout from '@mui/icons-material/Logout';
+import Settings from '@mui/icons-material/Settings';
+import { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
 
 const Navigation = () => {
     const { logout } = useLogout();
@@ -9,25 +15,99 @@ const Navigation = () => {
     const handleClick = () => {
         logout()
     }
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClickDrawer = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleAddAnother = () => {
+        logout();
+
+    }
+
 
     return (
-        <nav>
-            {user.isProf === 0 && <div>
-                <ul>
-                    <li><Link to='/'>Upcoming Exams</Link></li>
-                    <li><Link to='/account'>Account</Link></li>
-                    <li><Link to='/ongoingexam'>Ongoing Exams</Link></li>
-                    <li><Link to='/pastexam'>Past Exams</Link></li>
-                </ul>
-            </div>
+        <AppBar position="static" style={{ background: " #1c1b1b " }}>
+            {user.isProf === 0 &&
+                <Toolbar>
+                    <IconButton size="large" edge='start'>
+                        <img src="/Images/Logo.jpg" alt="logo"></img>
+                    </IconButton>
+                    <Typography sx={{ flexGrow: 1 }}></Typography>
+                    <Stack
+                        direction='row'
+                        spacing={2}
+                        justifyContent="flex-end"
+                        alignItems="baseline"
+                    >
+                        <Button color='inherit' component={Link} to='/'>Upcoming Exam</Button>
+                        <Button color='inherit' component={Link} to='/ongoingexam'>Ongoing Exam</Button>
+                        <Button color='inherit' component={Link} to='/pastexam'>Past Exam</Button>
+                        <Button color='inherit' onClick={handleClickDrawer}>
+                            <AccountCircleIcon />
+                        </Button>
+                    </Stack>
+                </Toolbar>
             }
-            <div>
-                {user && !user.isProf && (
-                    <Button variant="contained" onClick={handleClick}>Logout</Button>
-
+            <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        overflow: 'visible',
+                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                        mt: 1.5,
+                        '& .MuiAvatar-root': {
+                            width: 32,
+                            height: 32,
+                            ml: -0.5,
+                            mr: 1,
+                        },
+                        '&:before': {
+                            content: '""',
+                            display: 'block',
+                            position: 'absolute',
+                            top: 0,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            bgcolor: 'background.paper',
+                            transform: 'translateY(-50%) rotate(45deg)',
+                            zIndex: 0,
+                        },
+                    },
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+                <MenuItem component={Link} to='/account'>
+                    <Avatar /> {user.registerNo}
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleAddAnother}>
+                    <ListItemIcon>
+                        <PersonAdd fontSize="small" />
+                    </ListItemIcon>
+                    Add another account
+                </MenuItem>
+                {user && !user.isProg && (
+                    <MenuItem onClick={handleClick}>
+                        <ListItemIcon>
+                            <Logout fontSize="small" />
+                        </ListItemIcon>
+                        Logout
+                    </MenuItem>
                 )}
-            </div>
-        </nav >
+            </Menu>
+        </AppBar >
 
     );
 }

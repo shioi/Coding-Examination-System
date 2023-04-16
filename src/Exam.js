@@ -1,9 +1,11 @@
 import useFetch from './useFetch';
 import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
+import { Box, Typography } from '@mui/material';
 import { useAuthContext } from './useAuthContext';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
+import '@fontsource/roboto/300.css';
+
 
 const Exam = (props) => {
     const history = useHistory();
@@ -17,21 +19,19 @@ const Exam = (props) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { data, isLoading, error } = useFetch('http://localhost:4000/getExams', user);
 
-    const handleButtonClick = (data) => {
-        console.log(data)
-        props.setExamId(data);
-        history.push(`/question/${data}`);
-
-    }
-
     return (
         <div className="exam">
-            <h1>Upcoming Exams</h1>
+            <Typography variant='h3'>
+                Upcoming Exams
+            </Typography>
+
             {error && <div>{error}</div>}
             {isLoading && <div>Loading ...</div>}
             {data && data.map((question, index) => {
                 return (
-                    <Box key={question.id} sx={{ display: 'flex', ...commonStyles, borderRadius: '16px' }}>
+                    <Box key={question.id}
+                        sx={{ boxShadow: 6 }}
+                    >
                         <ul>
                             <li>
                                 <h2>{question.name}</h2>
