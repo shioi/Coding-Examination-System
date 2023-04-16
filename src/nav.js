@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLogout } from './useLogout';
 import { useAuthContext } from './useAuthContext';
 import { AppBar, Toolbar, IconButton, Typography, Stack, Button, Menu, MenuItem, ListItemIcon, Divider } from '@mui/material';
@@ -11,24 +11,23 @@ import Avatar from '@mui/material/Avatar';
 
 const Navigation = () => {
     const { logout } = useLogout();
-    const { user } = useAuthContext()
+    const { user } = useAuthContext();
+    const { pathname } = useLocation(); // Get the current location
     const handleClick = () => {
-        logout()
-    }
+        logout();
+    };
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClickDrawer = (event) => {
         setAnchorEl(event.currentTarget);
-    }
+    };
     const handleClose = () => {
         setAnchorEl(null);
     };
 
     const handleAddAnother = () => {
         logout();
-
-    }
-
+    };
 
     return (
         <AppBar position="static" style={{ background: " #1c1b1b " }}>
@@ -44,9 +43,15 @@ const Navigation = () => {
                         justifyContent="flex-end"
                         alignItems="baseline"
                     >
-                        <Button color='inherit' component={Link} to='/'>Upcoming Exam</Button>
-                        <Button color='inherit' component={Link} to='/ongoingexam'>Ongoing Exam</Button>
-                        <Button color='inherit' component={Link} to='/pastexam'>Past Exam</Button>
+                        <Button color='inherit' component={Link} to='/' className={pathname === '/' ? 'active' : ''}>
+                            Upcoming Exam
+                        </Button>
+                        <Button color='inherit' component={Link} to='/ongoingexam' className={pathname === '/ongoingexam' ? 'active' : ''}>
+                            Ongoing Exam
+                        </Button>
+                        <Button color='inherit' component={Link} to='/pastexam' className={pathname === '/pastexam' ? 'active' : ''}>
+                            Past Exam
+                        </Button>
                         <Button color='inherit' onClick={handleClickDrawer}>
                             <AccountCircleIcon />
                         </Button>
@@ -81,6 +86,7 @@ const Navigation = () => {
                             height: 10,
                             bgcolor: 'background.paper',
                             transform: 'translateY(-50%) rotate(45deg)',
+                            mt: '-5px',
                             zIndex: 0,
                         },
                     },
@@ -88,30 +94,34 @@ const Navigation = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem component={Link} to='/account'>
-                    <Avatar /> {user.registerNo}
+                <MenuItem component={Link} to='/profile'>
+                    <ListItemIcon>
+                        <Avatar />
+                    </ListItemIcon>
+                    <Typography variant="inherit">Profile</Typography>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleAddAnother}>
                     <ListItemIcon>
                         <PersonAdd fontSize="small" />
                     </ListItemIcon>
-                    Add another account
+                    <Typography variant="inherit">Add Another Account</Typography>
                 </MenuItem>
-                {user && !user.isProg && (
-                    <MenuItem onClick={handleClick}>
-                        <ListItemIcon>
-                            <Logout fontSize="small" />
-                        </ListItemIcon>
-                        Logout
-                    </MenuItem>
-                )}
+                <MenuItem onClick={handleClick}>
+                    <ListItemIcon>
+                        <Logout fontSize="small" />
+                    </ListItemIcon>
+                    <Typography variant="inherit">Logout</Typography>
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Settings fontSize="small" />
+                    </ListItemIcon>
+                    <Typography variant="inherit">Settings</Typography>
+                </MenuItem>
             </Menu>
-        </AppBar >
-
+        </AppBar>
     );
-}
+};
 
 export default Navigation;
-
-

@@ -12,8 +12,9 @@ const PastExams = (props) => {
         borderColor: 'text.primary',
         m: 1,
         border: 3,
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Add box shadow for a nice look
     };
-    const { user } = useAuthContext()
+    const { user } = useAuthContext();
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { data, isLoading, error } = useFetch('http://localhost:4000/getpastexams', user);
 

@@ -19,6 +19,13 @@ const Exam = (props) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { data, isLoading, error } = useFetch('http://localhost:4000/getExams', user);
 
+    const formatDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString();
+        return `${formattedDate} ${formattedTime}`;
+    };
+
     return (
         <div className="exam">
             <Typography variant='h3'>
@@ -38,7 +45,7 @@ const Exam = (props) => {
                                 <h3>{question.duration}</h3>
                                 <p>Total Marks: {question.totalMarks}</p>
                                 <p>Status: {question.examstatus}</p>
-                                <p>Date: {question.Date}</p>
+                                <p>Date: {formatDateTime(question.Date)}</p>
                             </li>
                         </ul>
                     </Box>

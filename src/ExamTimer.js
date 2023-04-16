@@ -8,6 +8,7 @@ import { Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useHistory } from 'react-router-dom'
 import Snackbar from '@mui/material/Snackbar';
+import Grid from '@mui/material/Grid';
 import { Alert } from '@mui/material';
 
 
@@ -136,27 +137,36 @@ const ExamTimer = (props) => {
     return (
         <Box
             sx={{
-                backgroundColor: 'primary.light',
+                backgroundColor: 'black',
             }}
         >
             <PageVisibility onChange={handleVisibilityChange}></PageVisibility>
-            {timeless &&
-                <ThemeProvider theme={themeAlert}>
-                    <Typography>
-                        Time remaining: {secondsToTime(seconds).h} :: {secondsToTime(seconds).m} :: {secondsToTime(seconds).s}
-                    </Typography>
-                </ThemeProvider>
-            }
-            {!timeless &&
-                <Typography>
-                    Time remaining: {secondsToTime(seconds).h} :: {secondsToTime(seconds).m} :: {secondsToTime(seconds).s}
-                </Typography>
-            }
-            {isMessage &&
-                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert severity="error" onClose={handleClose} sx={{ width: '100%' }}>{message}</Alert>
-                </Snackbar>
-            }
+            <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+            >
+                <Grid item>
+                    {timeless &&
+                        <ThemeProvider theme={themeAlert}>
+                            <Typography>
+                                Time: {secondsToTime(seconds).h} :: {secondsToTime(seconds).m} :: {secondsToTime(seconds).s}
+                            </Typography>
+                        </ThemeProvider>
+                    }
+                    {!timeless &&
+                        <Typography color="white">
+                            Time: {secondsToTime(seconds).h} :: {secondsToTime(seconds).m} :: {secondsToTime(seconds).s}
+                        </Typography>
+                    }
+                    {isMessage &&
+                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert severity="error" onClose={handleClose} sx={{ width: '100%' }}>{message}</Alert>
+                        </Snackbar>
+                    }
+                </Grid>
+            </Grid>
         </Box>
     );
 }

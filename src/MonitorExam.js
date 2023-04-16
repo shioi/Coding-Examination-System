@@ -1,23 +1,33 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useWebSocket from 'react-use-websocket'
-import { useParams } from "react-router-dom/cjs/react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAuthContext } from "./useAuthContext";
 import useFetch from './useFetch';
+import {
+    Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Button,
+    TextField,
+    Typography
+} from '@mui/material'
 
 const WS_URL = new URL('ws://127.0.0.1:8000/?id=1&examid=2&type=p');
-
 
 const MonitorExam = (props) => {
     const { user } = useAuthContext()
     const { eid } = useParams();
     const { data, isLoading, error } = useFetch(`http://localhost:4000/getstudents/${eid}`, user);
     const [activity, setActivity] = useState([]);
-
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [message, setMessage] = useState('');
+    const [openDialog, setOpenDialog] = useState(false);
 
     WS_URL.searchParams.set('id', user.registerNo);
     WS_URL.searchParams.set('examid', eid);
     WS_URL.searchParams.set('type', user.isProf);
-
 
     const {
         sendJsonMessage,
@@ -28,7 +38,6 @@ const MonitorExam = (props) => {
         onMessage: (event) => {
             const data = JSON.parse(event.data);
             if (data.userstatus) {
-
                 setActivity(activity => [...activity, data.message])
                 console.log(activity)
             }
@@ -36,36 +45,69 @@ const MonitorExam = (props) => {
         onClose: () => {
             console.log("closed")
         },
-    })
-    const printHello = (reg, id) => {
-        const data = document.getElementById(id).value
-        sendJsonMessage({ teacher: true, id: reg, message: data })
+    });
 
-    }
+    const handleSendClick = () => {
+        if (message && selectedStudent) {
+            sendJsonMessage({ teacher: true, id: selectedStudent.registerno, message: message });
+            setMessage('');
+            setSelectedStudent(null);
+            setOpenDialog(false);
+        }
+    };
 
     return (
-        <div>
-            <h1>Monitor Exam</h1>
-            {data && data.map((student, id) => {
-                return (
-                    <ul key={id}>
-                        <li>{student.registerno}</li>
-                        <li>{student.firstname}</li>
-                        <form >
-                            <input id={id}></input>
-                        </form>
-                        <button onClick={() => printHello(student.registerno, id)}>Send</button>
-                    </ul>
-                )
-            })}
-            <h2>Activity of students</h2>
-            {activity && activity.map((act, id) => {
-                return (
-                    <p key={id}>{act}</p>
-                )
-            })}
-        </div>
+        <Container>
+            <Typography variant="h1">Monitor Exam</Typography>
+            {data && data.map((student, id) => (
+                <ul key={id}>
+                    <li>{student.registerno}</li>
+                    <li>{student.firstname}</li>
+                    <li>{student.lastname}</li>
+                    <Button variant="outlined" onClick={() => {
+                        setSelectedStudent(student);
+                        setOpenDialog(true);
+                    }}>
+                        Send Message
+                    </Button>
+                </ul>
+            ))}
+            <Typography variant="h2">Activity of students</Typography>
+            {activity && activity.map((act, id) => (
+                <p key={id}>{act}</p>
+            ))}
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle>Send Message</DialogTitle>
+                <DialogContent>
+                    {selectedStudent && (
+                        <>
+                            <Typography variant="body1">
+                                Student: {selectedStudent.registerno} - {selectedStudent.firstname} {selectedStudent.lastname}
+                            </Typography>
+                            <TextField
+                                label="Message"
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                fullWidth
+                                margin="dense"
+                                variant="outlined"
+                                multiline
+                                rows={4}
+                            />
+                        </>
+                    )}
+                </DialogContent>
+                <DialogActions>
 
+                    <Button onClick={() => setOpenDialog(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSendClick} color="primary">
+                        Send
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </Container>
     );
 }
 

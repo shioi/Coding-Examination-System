@@ -44,7 +44,6 @@ const Output = (props) => {
                     </Box>
                 </Box>
             }
-            <h2>Output</h2>
             {out && !error && lines.map(line => {
                 k++;
                 return (

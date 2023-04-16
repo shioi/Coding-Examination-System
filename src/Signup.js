@@ -16,6 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
 import { useAuthContext } from './useAuthContext';
 import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
+import backgroundImg from './img/login.jpg'
 
 
 const Signup = (props) => {
@@ -30,8 +31,6 @@ const Signup = (props) => {
 
   }, [props])
 
-  const theme = createTheme();
-
   function Copyright(props) {
     return (
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -44,6 +43,18 @@ const Signup = (props) => {
       </Typography>
     );
   }
+
+
+
+  const theme = createTheme({
+    overrides: {
+      MuiTextField: {
+        root: {
+          backgroundColor: '#fff', // Set white background for TextField
+        },
+      },
+    },
+  });
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {

@@ -20,6 +20,7 @@ import TeacherDashboard from "./TeacherDashboard";
 import MonitorExam from "./MonitorExam";
 import SplitterLayout from "react-splitter-layout";
 import "react-splitter-layout/lib/index.css";
+import EditorLeftPane from "./EditorLeftPane";
 
 
 
@@ -67,11 +68,7 @@ function App() {
                 <Box className="my-pane">
                   <div className="pane-content">
                     {!user && <Redirect to="/login" />}
-                    <ExamTimer
-                      id={examid}
-                    />
-                    <Question setQueId={setQueId} setOutput={sendOutput} />
-                    <Output out={output} />
+                    <EditorLeftPane examid={examid} setQueId={setQueId} sendOutput={sendOutput} output={output} />
                   </div>
                 </Box>
                 <Box className="my-pane">

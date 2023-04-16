@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -13,7 +13,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    background: {
+      default: '#ffeedb', // set background color to yellowish (#ffeedb)
+    },
+  },
+});
 
 const LoginForm = ({ Login }) => {
   const submitHandler = e => {
@@ -21,8 +27,8 @@ const LoginForm = ({ Login }) => {
     const data = new FormData(e.currentTarget);
     const details = { "registerNo": data.get("Register Number"), "password": data.get("password") }
     Login(details);
-
   }
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -33,13 +39,17 @@ const LoginForm = ({ Login }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            backgroundColor: 'white', // set background color to white
+            padding: '24px', // add padding
+            borderRadius: '8px', // add border radius
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // add box shadow
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Welcome, Christite!
           </Typography>
           <Box component="form" onSubmit={submitHandler} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -70,7 +80,7 @@ const LoginForm = ({ Login }) => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, backgroundColor: '#ffa726' }} // set button background color to orange (#ffa726)
             >
               Sign In
             </Button>

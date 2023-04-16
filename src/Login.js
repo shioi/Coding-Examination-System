@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import axios from "axios";
 import Snackbar from '@mui/material/Snackbar';
 import { Alert } from '@mui/material';
 import { useAuthContext } from './useAuthContext';
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+
+import backgroundImage from './img/login.jpg'; // import your background image here
 
 const Login = (props) => {
   const [message, setMessage] = useState("");
@@ -19,7 +20,6 @@ const Login = (props) => {
     }
     setOpen(false);
   }
-
 
   const logging = (details) => {
     axios.post("http://localhost:4000/api/post/login", {
@@ -45,15 +45,32 @@ const Login = (props) => {
       })
   }
 
-
   return (
-    <div>
-      <LoginForm Login={logging} />
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert severity="error" onClose={handleClose} sx={{ width: '100%' }}>{message}</Alert>
-      </Snackbar>
+    <div style={{
+      backgroundImage: `url(${backgroundImage})`, // set background image
+      backgroundSize: 'cover', // make sure the image covers the entire background
+      backgroundPosition: 'center', // center the image
+      minHeight: '100vh', // set minimum height to 100vh to make sure the content is visible
+      display: 'flex', // use flexbox for layout
+      justifyContent: 'center', // center the content horizontally
+      alignItems: 'center' // center the content vertically
+    }}>
+      <div style={{
+        maxWidth: '400px', // set maximum width for the login form
+        padding: '32px', // add padding for spacing
+        backgroundColor: '#fff', // set background color for the login form
+        borderRadius: '4px', // add border radius for rounded corners
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' // add box shadow for a subtle effect
+      }}>
+
+        <LoginForm Login={logging} />
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert severity="error" onClose={handleClose} sx={{ width: '100%' }}>{message}</Alert>
+        </Snackbar>
+      </div>
     </div>
   )
 }
 
-export default Login
+export default Login;
+
