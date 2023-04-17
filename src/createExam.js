@@ -7,8 +7,11 @@ import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import { shadows } from '@mui/system';
 import { Divider } from "@mui/material";
-
-
+import { Typography } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
+import Button from '@mui/material/Button';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 const CreateExam = (props) => {
 
@@ -32,6 +35,50 @@ const CreateExam = (props) => {
         setTime,
         next,
     } = props
+
+    const BootstrapButton = styled(Button)({
+        boxShadow: 'none',
+        textTransform: 'none',
+        fontSize: 16,
+        padding: '6px 12px',
+        border: '1px solid',
+        lineHeight: 1.5,
+        backgroundColor: '#0063cc',
+        borderColor: '#0063cc',
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+        '&:hover': {
+            backgroundColor: '#0069d9',
+            borderColor: '#0062cc',
+            boxShadow: 'none',
+        },
+        '&:active': {
+            boxShadow: 'none',
+            backgroundColor: '#0062cc',
+            borderColor: '#005cbf',
+        },
+        '&:focus': {
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+        },
+    });
+
+    const ColorButton = styled(Button)(({ theme }) => ({
+        color: theme.palette.getContrastText(purple[500]),
+        backgroundColor: purple[500],
+        '&:hover': {
+            backgroundColor: purple[700],
+        },
+    }));
 
 
     const handleFormChange = (index, event) => {
@@ -105,10 +152,24 @@ const CreateExam = (props) => {
 
     return (
         <div className="questionForm">
-            <div>
-            </div>
-            <h1>Conduct Exam</h1>
-            <Box component="form">
+            <Box
+                sx={{
+                    width: "100%",
+                    height: "15vh",
+                    backgroundColor: 'white',
+                    boxShadow: 1,
+                }}
+            >
+                <InsertDriveFileIcon />
+                <Typography variant="h5">Conduct Exam</Typography>
+
+                <ColorButton onClick={next}>Next</ColorButton>
+            </Box>
+            <Box component="form"
+                sx={{
+                    m: 5
+                }}
+            >
                 <Grid
                     container
                     direction="column"
@@ -116,115 +177,235 @@ const CreateExam = (props) => {
                     alignItems="center"
                     spacing={8}
                 >
-                    <Grid item container spacing={2} direction="column" alignItems="center"
+                    <Box
+                        sx={{
+                            width: "60%",
+                            height: "500",
+                            backgroundColor: 'white',
+                            boxShadow: 1,
+                            m: 5,
+                            borderRadius: 2,
+                            p: 3,
+                            '&:hover': {
+                                boxShadow: 10,
+                                borderLeft: 1,
+                                borderColor: 'secondary.main',
+                                borderWidth: "5px"
+                            },
+                        }}
                     >
-                        <Grid item xs={4}>
-                            <TextField label="name" name="name" value={examName} onChange={event => setExamName(event.target.value)} />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField name="Subject" type="text" label="Subject" value={subject} onChange={event => setSubject(event.target.value)} />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField name="totalMarks" label="Total Marks" value={totalMarks} onChange={event => setTotalMarks(event.target.value)} />
-                        </Grid>
+                        <Grid item container spacing={2} direction="column" alignItems="center"
+                        >
+                            <Grid item xs={4}>
+                                <TextField label="name" name="name" value={examName} onChange={event => setExamName(event.target.value)} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField name="Subject" type="text" label="Subject" value={subject} onChange={event => setSubject(event.target.value)} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField name="totalMarks" label="Total Marks" value={totalMarks} onChange={event => setTotalMarks(event.target.value)} />
+                            </Grid>
 
-                        <Grid item xs={3}>
-                            <TextField name="password" label="Exam Password" value={password} onChange={event => setPassword(event.target.value)} />
+                            <Grid item xs={3}>
+                                <TextField name="password" label="Exam Password" value={password} onChange={event => setPassword(event.target.value)} />
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </Box>
                     <Divider />
-                    <Grid item container xs={8} justifyContent="center">
-                        <Grid item xs={3}>
-                            <TextField name="Date" InputLabelProps={{ shrink: true, required: true }} type="date" label="Date" value={date} onChange={event => setDate(event.target.value)} />
-                        </Grid>
+                    <Box
+                        sx={{
+                            width: "60%",
+                            height: "500",
+                            backgroundColor: 'white',
+                            boxShadow: 1,
+                            m: 5,
+                            borderRadius: 2,
+                            p: 3,
+                            '&:hover': {
+                                boxShadow: 10,
+                                borderLeft: 1,
+                                borderColor: 'secondary.main',
+                                borderWidth: "5px"
+                            },
+                        }}
+                    >
+                        <Grid item container xs={10} justifyContent="center">
+                            <Grid item xs={4}>
+                                <TextField name="Date" InputLabelProps={{ shrink: true, required: true }} type="date" label="Date" value={date} onChange={event => setDate(event.target.value)} />
+                            </Grid>
 
-                        <Grid item xs={3}>
-                            <TextField name="Time" InputLabelProps={{ shrink: true, required: true }} type="time" label="Time" value={time} onChange={event => setTime(event.target.value)} />
+                            <Grid item xs={4}>
+                                <TextField name="Time" InputLabelProps={{ shrink: true, required: true }} type="time" label="Time" value={time} onChange={event => setTime(event.target.value)} />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <TextField name="duration" label="Duration" value={duration} onChange={event => setDuration(event.target.value)} />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={3}>
-                            <TextField name="duration" label="Duration" value={duration} onChange={event => setDuration(event.target.value)} />
-                        </Grid>
-                    </Grid>
+                    </Box>
+
 
                     {testInputFields.map((input, index) => {
                         return (
-                            <Grid container item spacing={2} justifyContent="center" direction="column" xs={10}
-
-                                key={index}
+                            <Box
+                                sx={{
+                                    width: "60%",
+                                    height: "500",
+                                    backgroundColor: 'white',
+                                    boxShadow: 1,
+                                    m: 5,
+                                    borderRadius: 2,
+                                    p: 3,
+                                    '&:hover': {
+                                        boxShadow: 10,
+                                        borderLeft: 1,
+                                        borderColor: 'secondary.main',
+                                        borderWidth: "5px"
+                                    },
+                                }}
                             >
-                                <h3>Question No: {index + 1}</h3>
-                                <TextareaAutosize
-                                    maxRows={900}
-                                    style={{ width: 500 }}
-                                    name="Question"
-                                    placeholder="Question"
-                                    value={input.Question}
-                                    onChange={event => handleFormChange(index, event)}
-                                />
-                                <TextField
-                                    name="Marks"
-                                    placeholder="Marks"
-                                    value={input.Marks}
-                                    onChange={event => handleFormChange(index, event)}
-                                />
-                                {input["Functions"].map((func, index2) => {
-                                    return (
+                                <Grid container item spacing={1} justifyContent="center" direction="column" xs={8}
 
-                                        <div key={index2}>
+                                    key={index}
+                                >
+                                    <Grid item>
+                                        <Typography variant="p">Question No: {index + 1}</Typography>
+
+                                    </Grid>
+                                    <Grid item>
+
+                                        <TextareaAutosize
+                                            maxRows={900}
+                                            style={{
+                                                width: 800,
+                                                height: 100
+                                            }}
+                                            name="Question"
+                                            placeholder="Question"
+                                            value={input.Question}
+                                            onChange={event => handleFormChange(index, event)}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <Box
+                                            sx={{
+                                                m: 1,
+                                            }}
+                                        >
                                             <TextField
-                                                name="functionName"
-                                                placeholder="Function Name"
-                                                value={func.functionName}
-                                                onChange={event => handleFuncFormChange(index, index2, event)}
+                                                name="Marks"
+                                                placeholder="Marks"
+                                                value={input.Marks}
+                                                onChange={event => handleFormChange(index, event)}
                                             />
-                                            <select name="Type" onChange={(event) => handleFuncFormChange(index, index2, event)}>
-                                                <option value="value">value</option>
-                                                <option value="output">output</option>
-                                            </select>
-                                            {func["TestCases"].map((cases, index3) => {
-                                                return (
-                                                    <div key={index3}>
-                                                        <TextField
-                                                            name="Input"
-                                                            placeholder="Test Input"
-                                                            value={cases.Input}
-                                                            onChange={event => handleTestFormChange(index, index2, index3, event)}
-                                                        />
+                                        </Box>
+                                    </Grid>
+                                    <Divider />
 
-                                                        <TextField
-                                                            name="Output"
-                                                            placeholder="Test Output"
-                                                            value={cases.Output}
-                                                            onChange={event => handleTestFormChange(index, index2, index3, event)}
-                                                        />
-                                                        <button onClick={() => { deleteField(index, index2) }} type="button">Delete Test</button>
-                                                    </div>
+                                    {input["Functions"].map((func, index2) => {
+                                        return (
+                                            <Grid item container>
+                                                <Box key={index2}
+                                                    spacing={2}
+                                                    sx={{
+                                                        p: 2,
+                                                        m: 3,
+                                                    }}
+                                                >
+                                                    <Grid item xs={10} container spacing={2}>
+                                                        <Grid item>
 
-                                                )
-                                            })}
+                                                            <TextField
+                                                                name="functionName"
+                                                                placeholder="Function Name"
+                                                                value={func.functionName}
+                                                                onChange={event => handleFuncFormChange(index, index2, event)}
+                                                            />
+                                                        </Grid>
+                                                        <Grid item>
+
+                                                            <select name="Type" onChange={(event) => handleFuncFormChange(index, index2, event)}>
+                                                                <option value="value">value</option>
+                                                                <option value="output">output</option>
+                                                            </select>
+                                                        </Grid>
+                                                    </Grid>
+
+                                                    {func["TestCases"].map((cases, index3) => {
+                                                        return (
 
 
+                                                            <Grid key={index3} container item spacing={3}
+                                                            >
+                                                                <Grid item >
 
-                                            <button onClick={() => { addFields(index, index2) }} type="button">Add Test Cases</button>
-                                            <button onClick={() => { deleteFunction(index, index2) }} type="button">Delete Function</button>
-                                        </div>
-                                    )
-                                })}
+                                                                    <TextField
+                                                                        name="Input"
+                                                                        placeholder="Test Input"
+                                                                        value={cases.Input}
+                                                                        onChange={event => handleTestFormChange(index, index2, index3, event)}
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item>
 
-                                <button onClick={() => { addFunction(index) }} type="button">Add Function</button>
-                                < button onClick={() => { deleteQuestion(index) }} type="button">Delete Question</button>
+                                                                    <TextField
+                                                                        name="Output"
+                                                                        placeholder="Test Output"
+                                                                        value={cases.Output}
+                                                                        onChange={event => handleTestFormChange(index, index2, index3, event)}
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item >
+                                                                    <ColorButton
+                                                                        onClick={() => { deleteField(index, index2) }} type="ColorButton">Delete Test</ColorButton>
+                                                                </Grid>
+                                                            </Grid>
+                                                        )
+                                                    })}
+                                                    <Grid item container direction="column" spacing={2} xs={6}>
+                                                        <Grid item>
+                                                            <ColorButton onClick={() => { addFields(index, index2) }} type="ColorButton">Add Test Cases</ColorButton>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <ColorButton onClick={() => { deleteFunction(index, index2) }} type="ColorButton">Delete Function</ColorButton>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Box>
+
+                                            </Grid>
+                                        )
+                                    })}
+                                    <Grid item >
+
+                                        <ColorButton onClick={() => { addFunction(index) }} type="ColorButton">Add Function</ColorButton>
+                                    </Grid>
+                                    <Grid item>
+                                        < ColorButton onClick={() => { deleteQuestion(index) }} type="ColorButton">Delete Question</ColorButton>
+                                    </Grid>
 
 
-                            </Grid>
+                                </Grid>
+                            </Box>
+
 
                         )
 
                     })}
-                    <button onClick={addQuestion} type="button">Add Question</button>
+                    <Grid item container xs={10} direction="row" spacing={10}>
+                        <Grid
+                            item justifyContent="flex-end"
 
-                    <button onClick={next}>Next</button>
-                </Grid>
-            </Box>
+                            alignItems="flex-end">
+
+                            <ColorButton onClick={addQuestion} type="ColorButton">Add Question</ColorButton>
+                        </Grid>
+
+                        <Grid item>
+
+
+                        </Grid>
+                    </Grid>
+                </Grid >
+            </Box >
 
         </div >
     );

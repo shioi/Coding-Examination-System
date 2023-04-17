@@ -159,7 +159,7 @@ const EditorView = (props) => {
             </StyledMenu>
             <div className="editor">
                 <Editor
-                    height="400px"
+                    height="500px"
                     width="100%"
                     language={language}
                     onChange={handleEditorChange}

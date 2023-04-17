@@ -183,31 +183,33 @@ function DashboardContent() {
                             {data && data.filter((exam) => { return exam.examstatus === category }).map((question, index) => {
                                 return (
                                     <Grid item xs={12} md={8} lg={9}>
-                                        <Paper
+
+                                        <Box key={question.id}
                                             sx={{
-                                                p: 2,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                height: 300,
+                                                backgroundColor: 'white',
+                                                boxShadow: 1,
+                                                m: 1,
+                                                p: 3,
+                                                '&:hover': {
+                                                    boxShadow: 10,
+                                                },
                                             }}
                                         >
-                                            <Box key={question.id}>
-                                                <ul>
-                                                    <li>
-                                                        <h2>{question.name}</h2>
-                                                        <h3>{question.duration}</h3>
-                                                        <p>Total Marks: {question.totalMarks}</p>
-                                                        <p>Status: {question.examstatus}</p>
-                                                        <p>Date: {question.Date}</p>
-                                                        {category === "ongoing" &&
-                                                            <Link to={`/monitor/${question.id}`}>
-                                                                <button>Check</button>
-                                                            </Link>
-                                                        }
-                                                    </li>
-                                                </ul>
-                                            </Box>
-                                        </Paper>
+                                            <ul>
+                                                <li>
+                                                    <h2>{question.name}</h2>
+                                                    <h3>{question.duration}</h3>
+                                                    <p>Total Marks: {question.totalMarks}</p>
+                                                    <p>Status: {question.examstatus}</p>
+                                                    <p>Date: {question.Date}</p>
+                                                    {category === "ongoing" &&
+                                                        <Link to={`/monitor/${question.id}`}>
+                                                            <button>Check</button>
+                                                        </Link>
+                                                    }
+                                                </li>
+                                            </ul>
+                                        </Box>
                                     </Grid>
                                 )
                             })}
@@ -216,7 +218,7 @@ function DashboardContent() {
                     </Container>
                 </Box>
             </Box>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }
 

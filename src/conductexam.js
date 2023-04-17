@@ -2,6 +2,7 @@ import { useState } from "react";
 import CreateExam from "./createExam";
 import ChooseStudent from "./ChooseStudent";
 import { useAuthContext } from './useAuthContext';
+import Navigation from "./nav";
 
 
 const Conductexam = () => {
@@ -81,6 +82,7 @@ const Conductexam = () => {
     switch (step) {
         case 1:
             return (
+
                 <CreateExam
 
                     examName={examName}
