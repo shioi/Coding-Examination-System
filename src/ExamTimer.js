@@ -10,6 +10,12 @@ import { useHistory } from 'react-router-dom'
 import Snackbar from '@mui/material/Snackbar';
 import Grid from '@mui/material/Grid';
 import { Alert } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 
 
 const WS_URL = new URL('ws://127.0.0.1:8000/?id=1&examid=2&type=p');
@@ -27,6 +33,7 @@ const ExamTimer = (props) => {
     const [message, setMessage] = useState('');
     const [isMessage, setIsMessage] = useState(false);
     const [tabSwitch, setTabSwitch] = useState(null);
+    const [endedBox, setEndedBox] = useState(false);
 
     const examid = props.id
     WS_URL.searchParams.set('id', user.registerNo);
@@ -82,7 +89,13 @@ const ExamTimer = (props) => {
             if (data.type === "time") {
 
                 setSeconds(data.data * 60)
-            } else {
+            } else if (data.examended) {
+                console.log("teached ended")
+                console.log(data.examended)
+                setEndedBox(true);
+
+            }
+            else {
                 console.log(data.message)
                 setMessage(data.message)
                 setOpen(true);
@@ -90,10 +103,20 @@ const ExamTimer = (props) => {
             }
         },
         onClose: () => {
-            console.log("closed")
             history.push('/')
+
         },
     })
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpen(false);
+        history.push('/')
+
+    };
 
 
     useEffect(() => {
@@ -167,6 +190,29 @@ const ExamTimer = (props) => {
                     }
                 </Grid>
             </Grid>
+            {endedBox &&
+                <Dialog
+                    open={endedBox}
+                    onClose={handleCloseDialog}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Exam Ended"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Let Google help apps determine location. This means sending anonymous
+                            location data to Google, even when no apps are running.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog} autoFocus>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            }
         </Box>
     );
 }

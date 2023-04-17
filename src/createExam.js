@@ -156,12 +156,12 @@ const CreateExam = (props) => {
                 sx={{
                     width: "100%",
                     height: "15vh",
-                    backgroundColor: 'white',
+                    backgroundColor: '#3498db',
                     boxShadow: 1,
                 }}
             >
                 <InsertDriveFileIcon />
-                <Typography variant="h5">Conduct Exam</Typography>
+                <Typography variant="h5" color="white">Conduct Exam</Typography>
 
                 <ColorButton onClick={next}>Next</ColorButton>
             </Box>

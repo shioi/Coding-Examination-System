@@ -203,12 +203,29 @@ app.get('/question/:qid', (req, res) => {
     })
 })
 
+app.get('/getdetail/:eid', (req, res) => {
+    const eid = req.params.eid;
+    dbms.getDetail(eid, (result) => {
+        res.status(200).json(result);
+    })
+})
+
+
 app.get('/getstudents/:eid', (req, res) => {
     const id = req.params.eid;
     //console.log(id);
     dbms.getStu(id, (result) => {
+        console.log(result)
         res.status(200).json(result);
     })
+})
+
+app.get('/conductexamnow/:eid', (req, res) => {
+    const id = req.params.eid;
+    //console.log(id);
+    dbms.setExamNow(id, () => {
+        res.status(200);
+    });
 })
 
 

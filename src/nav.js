@@ -8,13 +8,16 @@ import Logout from '@mui/icons-material/Logout';
 import Settings from '@mui/icons-material/Settings';
 import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
+import { useHistory } from 'react-router-dom'
 
 const Navigation = () => {
+    const history = useHistory();
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const { pathname } = useLocation(); // Get the current location
     const handleClick = () => {
         logout();
+        history.push('/')
     };
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -30,7 +33,7 @@ const Navigation = () => {
     };
 
     return (
-        <AppBar position="static" style={{ background: " #1c1b1b " }}>
+        <AppBar position="sticky" style={{ background: " #1c1b1b ", width: "auto" }}>
             {user.isProf === 0 &&
                 <Toolbar>
                     <IconButton size="large" edge='start'>

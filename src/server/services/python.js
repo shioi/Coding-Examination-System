@@ -54,9 +54,14 @@ const runcode = async (filename, func, url, qid, userid) => {
     exec(command, async (err, stdout, stderr) => {
         //iterate over solved.txt
         const solvedData = findSolved(`${url[0].path}/solved.txt`);
-        const totalProbSolved = {
-            'total': solvedData[0].substring(solvedData[0].lastIndexOf(':') + 1),
-            'solved': solvedData[1].substring(solvedData[1].lastIndexOf(':') + 1)
+        let totalProbSolved;
+        if (solvedData) {
+            totalProbSolved = {
+                'total': solvedData[0].substring(solvedData[0].lastIndexOf(':') + 1),
+                'solved': solvedData[1].substring(solvedData[1].lastIndexOf(':') + 1)
+            }
+        } else {
+            totalProbSolved = null;
         }
         console.log(totalProbSolved)
         if (err || stderr) {
@@ -66,14 +71,12 @@ const runcode = async (filename, func, url, qid, userid) => {
                 type: "Error",
                 errorType: output.syntax,
                 data: output.Error,
-                totalTestPassed: totalProbSolved
             });
         } else if (stderr) {
             console.log(`stderr: ${stderr.message}`)
             func({
                 type: "Error",
                 data: err.message,
-                totalTestPassed: totalProbSolved
             });
         } else {
             if (totalProbSolved['total'] === totalProbSolved['solved']) {

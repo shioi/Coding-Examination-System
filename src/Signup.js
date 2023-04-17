@@ -44,6 +44,47 @@ const Signup = (props) => {
     );
   }
 
+  const validEmailRegex = RegExp(
+    /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+  );
+  const validateForm = errors => {
+    let valid = true;
+    Object.values(errors).forEach(val => val.length > 0 && (valid = false));
+    return valid;
+  };
+
+  const [errors, setErrors] = useState([{ 'firstname': '', 'lastname': '', 'email': '', 'RegisterNumber': '', Password: '' }])
+
+  const handleChangeError = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    let errors = this.state.errors;
+
+    switch (name) {
+      case 'firstname':
+        errors.firstname =
+          value.length < 5
+            ? 'Full Name must be at least 5 characters long!'
+            : '';
+        break;
+      case 'email':
+        errors.email =
+          validEmailRegex.test(value)
+            ? ''
+            : 'Email is not valid!';
+        break;
+      case 'lastname':
+        errors.lastname =
+          value.length < 8
+            ? 'Password must be at least 8 characters long!'
+            : '';
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ errors, [name]: value });
+  }
 
 
   const theme = createTheme({
@@ -68,6 +109,8 @@ const Signup = (props) => {
   const handleChange = (event) => {
     setClas(event.target.value);
   };
+
+
 
   //TODO: making Register.js and Signup.js in same page 
   const register = (e) => {
