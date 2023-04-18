@@ -18,7 +18,8 @@ const getExams = (id, func) => {
 }
 
 const getPastExams = (id, func) => {
-    const statement = `SELECT * from exams WHERE id in( select examid from examtakingstudent where registerno=${id} and status="Done");`;
+    const statement = `SELECT * from exams INNER JOIN examtakingstudent on id = examid where examstatus = "Done" and registerno = ${id};`;
+
     console.log(statement)
     execution(statement, func);
 }
@@ -171,12 +172,22 @@ const getTiming = (userid, examid, func) => {
 const updateMarks = (userid, questionid) => {
     console.log(userid, questionid)
     const examid = questionid.substring(0, questionid.lastIndexOf('-'));
-    //update now
-    const sql = `update examtakingstudent set marks=marks + (select Marks from Question where id='${questionid}') where registerno='${userid}' and examid='${examid}'`
-    console.log(sql)
-    pool.execute(sql, (error, result) => {
-        if (error) {
-            console.log(error)
+    //find if already there
+    const sqltemp = `select * from usercode where registerno="${userid}" and qid="${questionid}" `;
+    pool.execute(sqltemp, (err, result) => {
+        if (err) throw err;
+        if (result.length === 0) {
+            const sql = `update examtakingstudent set marks=marks + (select Marks from Question where id='${questionid}') where registerno='${userid}' and examid='${examid}'`
+            pool.execute(sql, (error, result) => {
+                if (error) {
+                    console.log(error)
+                    throw error;
+                }
+
+                pool.execute(`insert into usercode(registerno,qid) values("${userid}", "${questionid}")`, (err) => {
+                    if (err) throw err;
+                })
+            })
         }
     })
 }
@@ -231,10 +242,34 @@ const getStu = (examid, func) => {
     })
 }
 
+const endExam = (examid) => {
+    const sql = `update exams set examstatus="Done" where id="${examid}"`
+    pool.execute(sql, (err) => {
+        if (err) throw err;
+    })
+}
+
+const setExamNow = (examid, func) => {
+    const sql = `update exams set examstatus="ongoing" where id="${examid}"`
+    pool.execute(sql, (err) => {
+        if (err) throw err;
+        func();
+    })
+}
+
+const getDetail = (examid, func) => {
+    const sql = `select * from examtakingstudent where examid="${examid}"`;
+    console.log(sql)
+    pool.execute(sql, (err, result) => {
+        if (err) throw err;
+        func(result)
+
+    })
+}
 
 module.exports = {
     getExams, getQuestion, findTestCase, postQuestion, insertTestCase, retriveLogin,
     postRegister, getType, getStudents, updateMarks, getTiming, storeTime, updateExamStatus
-    , getDateTime, setStatus, getCurrentExams, getPastExams, getTeacherExams, getStu
+    , getDateTime, setStatus, getCurrentExams, getPastExams, getTeacherExams, getStu, endExam, getDetail, setExamNow,
 };
 

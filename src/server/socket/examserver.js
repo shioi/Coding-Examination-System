@@ -26,8 +26,8 @@ function broadcastMessage(json) {
     const data = JSON.stringify(json);
     for (let userId in clients) {
         let client = clients[userId];
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(data);
+        if (client.connection.readyState === WebSocket.OPEN) {
+            client.connection.send(data);
         }
     };
 }
@@ -118,6 +118,13 @@ wsServer.on('connection', function (connection, req) {
                     client.connection.send(JSON.stringify({ userstatus: true, message: jsonData.message }))
                 }
             };
+
+        }
+
+        if (jsonData.endexam) {
+            console.log("here")
+            dbms.endExam(jsonData.examid);
+            broadcastMessage({ examended: true });
 
         }
     })

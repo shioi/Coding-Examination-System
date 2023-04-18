@@ -25,11 +25,23 @@ const PastExams = (props) => {
 
     }
 
+    const formatDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString();
+        return `${formattedDate} ${formattedTime}`;
+    };
+
+
     return (
         <div className="exam">
+<<<<<<< HEAD
             <Typography className="examtitle" variant='h6'>
                 <center>PAST EXAMS</center>
             </Typography>
+=======
+            <h1>Past Exams</h1>
+>>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
             {error && <div>{error}</div>}
             {isLoading && <div>Loading ...</div>}
             {data && data.map((question, index) => {
@@ -41,7 +53,9 @@ const PastExams = (props) => {
                                 <h3>{question.duration}</h3>
                                 <p>Total Marks: {question.totalMarks}</p>
                                 <p>Status: {question.examstatus}</p>
-                                <p>Date: {question.Date}</p>
+                                <p>Date: {formatDateTime(question.Date)}</p>
+                                <p>Total Marks: {question.totalMarks}</p>
+                                <p>Your Marks: {question.marks}</p>
                             </li>
                         </ul>
                     </Box>

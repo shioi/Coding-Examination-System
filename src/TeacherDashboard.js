@@ -25,6 +25,14 @@ import Button from '@mui/material/Button';
 import useFetch from './useFetch';
 import { ListItem } from '@mui/material';
 import ListItemButton from '@mui/material/ListItemButton';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+import CloseIcon from '@mui/icons-material/Close';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 
 const drawerWidth = 240;
@@ -86,12 +94,16 @@ const commonStyles = {
 
 
 
+
 function DashboardContent() {
     const [open, setOpen] = React.useState(true);
     const [category, setCategory] = React.useState("ongoing");
     const { logout } = useLogout();
     const { user } = useAuthContext()
     const { data, isLoading, error } = useFetch('http://localhost:4000/getteacherexams', user);
+    const [info, setInfo] = React.useState(null)
+    const [errorInfo, setErrorInfo] = React.useState()
+
     console.log(data)
     const handleClick = () => {
         logout()
@@ -101,9 +113,84 @@ function DashboardContent() {
         setOpen(!open);
     };
 
+
+    const [openDialog, setOpenDialog] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpenDialog(false);
+    };
+
+    const formatDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString();
+        return `${formattedDate} ${formattedTime}`;
+    };
+
+    const conductExamNow = (eid) => {
+        const url = `http://localhost:4000/conductexamnow/${eid}`
+        fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        })
+            .catch(err => {
+                setErrorInfo(true);
+
+            })
+
+    }
+
+
+
+    const seeDetails = (eid) => {
+        const url = `http://localhost:4000/getdetail/${eid}`
+        fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw Error("Could not load data");
+                }
+                return res.json();
+            })
+            .then(data => {
+                setInfo(data);
+                setErrorInfo(false);
+                if (data) {
+                    setOpenDialog(true);
+                }
+
+            })
+            .catch(err => {
+                setErrorInfo(true);
+
+            })
+
+
+
+    }
+
+    const columns = [
+        { field: 'registerno', headerName: 'ID', width: 100 },
+        { field: 'status', headerName: 'Status', width: 130 },
+        { field: 'marks', headerName: 'Marks', width: 130 },];
+
     return (
         <ThemeProvider theme={mdTheme}>
+<<<<<<< HEAD
             <Box className="dashboard" sx={{ display: 'flex' }}>
+=======
+            <Box sx={{ display: 'flex' }}>
+
+
+>>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
                 <CssBaseline />
                 <AppBar position="absolute" open={open}>
                     <Toolbar
@@ -111,6 +198,7 @@ function DashboardContent() {
                             pr: '60px', // keep right padding when drawer closed
                         }}
                     >
+
                         <IconButton
                             edge="start"
                             color="inherit"
@@ -130,7 +218,11 @@ function DashboardContent() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
+<<<<<<< HEAD
                             UPCOMING EXAMS
+=======
+                            {category}
+>>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
                         </Typography>
                         <IconButton color="inherit">
                             <Badge color="secondary">
@@ -155,13 +247,18 @@ function DashboardContent() {
                         </IconButton>
                     </Toolbar>
                     <Divider />
-                    <ul>
+                    <ul class="display-list">
                         <li>
                             <Link to='/createExam'>Conduct Exam</Link>
                         </li>
                         <li><Link to="#" onClick={() => setCategory("ongoing")}>Ongoing</Link></li>
+<<<<<<< HEAD
                         <li><Link to="#" onClick={() => setCategory("upcoming")}>Upcoming</Link></li>
                         <li><Link to="#" onClick={() => setCategory("Done")}>Done</Link></li>
+=======
+                        <li>                        <Link to="#" onClick={() => setCategory("upcoming")}>Upcoming</Link></li>
+                        <li><Link to="#" onClick={() => setCategory("Done")}>Finished</Link></li>
+>>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
                     </ul>
                 </Drawer>
                 <Box
@@ -195,17 +292,23 @@ function DashboardContent() {
                                                 },
                                             }}
                                         >
-                                            <ul>
+                                            <ul >
                                                 <li>
                                                     <h2>{question.name}</h2>
-                                                    <h3>{question.duration}</h3>
+                                                    <p>Duration: {question.duration}</p>
                                                     <p>Total Marks: {question.totalMarks}</p>
                                                     <p>Status: {question.examstatus}</p>
-                                                    <p>Date: {question.Date}</p>
+                                                    <p>Date: {formatDateTime(question.Date)}</p>
                                                     {category === "ongoing" &&
                                                         <Link to={`/monitor/${question.id}`}>
                                                             <button>Check</button>
                                                         </Link>
+                                                    }
+                                                    {category === "Done" &&
+                                                        <button onClick={() => seeDetails(question.id)}>Check</button>
+                                                    }
+                                                    {category === "upcoming" &&
+                                                        <button onClick={() => conductExamNow(question.id)}>Start Now</button>
                                                     }
                                                 </li>
                                             </ul>
@@ -218,6 +321,48 @@ function DashboardContent() {
                     </Container>
                 </Box>
             </Box>
+            {info &&
+                < Dialog
+                    fullScreen
+                    open={openDialog}
+                    onClose={handleClose}
+                    TransitionComponent={Transition}
+                >
+                    <AppBar sx={{ position: 'relative' }}>
+                        <Toolbar>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                onClick={handleClose}
+                                aria-label="close"
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                                Marks
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <div style={{ height: 400, width: '100%' }}>
+                        <DataGrid
+                            rows={info}
+                            columns={columns}
+                            pageSize={5}
+                            rowsPerPageOptions={[5]}
+                            checkboxSelection
+                            getRowId={(row) => row.registerno}
+                            slots={{ toolbar: GridToolbar }}
+                            slotProps={{
+                                toolbar: {
+                                    showQuickFilter: true,
+                                    quickFilterProps: { debounceMs: 500 },
+                                },
+                            }}
+
+                        />
+                    </div>
+                </Dialog >
+            }
         </ThemeProvider >
     );
 }
