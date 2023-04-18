@@ -73,10 +73,12 @@ const CreateExam = (props) => {
     });
 
     const ColorButton = styled(Button)(({ theme }) => ({
-        color: theme.palette.getContrastText(purple[500]),
-        backgroundColor: purple[500],
+        color: "white",
+        backgroundColor: "#233DBA",
         '&:hover': {
-            backgroundColor: purple[700],
+            backgroundColor: "white",
+            color: "#233DBA",
+            border: "2px solid #233DBA"
         },
     }));
 
@@ -155,15 +157,20 @@ const CreateExam = (props) => {
             <Box
                 sx={{
                     width: "100%",
-                    height: "15vh",
-                    backgroundColor: 'white',
+                    height: "16vh",
+                    backgroundColor: '#383839',
+                    color: "white",
                     boxShadow: 1,
+                    borderRadius: "10px"
                 }}
             >
-                <InsertDriveFileIcon />
-                <Typography variant="h5">Conduct Exam</Typography>
+                <center>
+                    <Typography variant="h5"> <InsertDriveFileIcon /> CONDUCT EXAM</Typography>
+                    <ColorButton style={{
+                        marginTop: "5px"
+                    }} onClick={next}>Next</ColorButton><br />
+                </center>
 
-                <ColorButton onClick={next}>Next</ColorButton>
             </Box>
             <Box component="form"
                 sx={{
@@ -181,7 +188,7 @@ const CreateExam = (props) => {
                         sx={{
                             width: "60%",
                             height: "500",
-                            backgroundColor: 'white',
+                            backgroundColor: '#FFFEF7',
                             boxShadow: 1,
                             m: 5,
                             borderRadius: 2,
@@ -189,7 +196,7 @@ const CreateExam = (props) => {
                             '&:hover': {
                                 boxShadow: 10,
                                 borderLeft: 1,
-                                borderColor: 'secondary.main',
+                                borderColor: '#233DBA',
                                 borderWidth: "5px"
                             },
                         }}
@@ -216,7 +223,7 @@ const CreateExam = (props) => {
                         sx={{
                             width: "60%",
                             height: "500",
-                            backgroundColor: 'white',
+                            backgroundColor: '#FFFEF7',
                             boxShadow: 1,
                             m: 5,
                             borderRadius: 2,
@@ -224,7 +231,7 @@ const CreateExam = (props) => {
                             '&:hover': {
                                 boxShadow: 10,
                                 borderLeft: 1,
-                                borderColor: 'secondary.main',
+                                borderColor: '#233DBA',
                                 borderWidth: "5px"
                             },
                         }}
@@ -250,7 +257,7 @@ const CreateExam = (props) => {
                                 sx={{
                                     width: "60%",
                                     height: "500",
-                                    backgroundColor: 'white',
+                                    backgroundColor: '#FFFEF7',
                                     boxShadow: 1,
                                     m: 5,
                                     borderRadius: 2,
@@ -258,7 +265,7 @@ const CreateExam = (props) => {
                                     '&:hover': {
                                         boxShadow: 10,
                                         borderLeft: 1,
-                                        borderColor: 'secondary.main',
+                                        borderColor: '#233DBA',
                                         borderWidth: "5px"
                                     },
                                 }}
@@ -268,7 +275,9 @@ const CreateExam = (props) => {
                                     key={index}
                                 >
                                     <Grid item>
-                                        <Typography variant="p">Question No: {index + 1}</Typography>
+                                        <center>
+                                            <b><Typography variant="p">Question No: {index + 1}</Typography></b>
+                                        </center>
 
                                     </Grid>
                                     <Grid item>
@@ -339,6 +348,9 @@ const CreateExam = (props) => {
                                                                 <Grid item >
 
                                                                     <TextField
+                                                                        style={{
+                                                                            paddingTop: "20px"
+                                                                        }}
                                                                         name="Input"
                                                                         placeholder="Test Input"
                                                                         value={cases.Input}
@@ -348,6 +360,9 @@ const CreateExam = (props) => {
                                                                 <Grid item>
 
                                                                     <TextField
+                                                                        style={{
+                                                                            paddingTop: "20px"
+                                                                        }}
                                                                         name="Output"
                                                                         placeholder="Test Output"
                                                                         value={cases.Output}
@@ -355,7 +370,9 @@ const CreateExam = (props) => {
                                                                     />
                                                                 </Grid>
                                                                 <Grid item >
-                                                                    <ColorButton
+                                                                    <ColorButton style={{
+                                                                        marginLeft: "330px"
+                                                                    }}
                                                                         onClick={() => { deleteField(index, index2) }} type="ColorButton">Delete Test</ColorButton>
                                                                 </Grid>
                                                             </Grid>
@@ -363,10 +380,18 @@ const CreateExam = (props) => {
                                                     })}
                                                     <Grid item container direction="column" spacing={2} xs={6}>
                                                         <Grid item>
-                                                            <ColorButton onClick={() => { addFields(index, index2) }} type="ColorButton">Add Test Cases</ColorButton>
+                                                            <ColorButton style={{
+                                                                marginTop: "10px",
+                                                                marginLeft: "315px",
+                                                                width: "140px"
+                                                            }} onClick={() => { addFields(index, index2) }} type="ColorButton">Add Test Cases</ColorButton>
                                                         </Grid>
                                                         <Grid item>
-                                                            <ColorButton onClick={() => { deleteFunction(index, index2) }} type="ColorButton">Delete Function</ColorButton>
+                                                            <ColorButton style={{
+                                                                marginTop: "25px",
+                                                                marginLeft: "300px",
+                                                                width: "170px"
+                                                            }} onClick={() => { deleteFunction(index, index2) }} type="ColorButton">Delete Function</ColorButton>
                                                         </Grid>
                                                     </Grid>
                                                 </Box>
@@ -376,10 +401,17 @@ const CreateExam = (props) => {
                                     })}
                                     <Grid item >
 
-                                        <ColorButton onClick={() => { addFunction(index) }} type="ColorButton">Add Function</ColorButton>
+                                        <ColorButton style={{
+                                            marginLeft: "340px",
+                                            width: "170px"
+                                        }} onClick={() => { addFunction(index) }} type="ColorButton">Add Function</ColorButton>
                                     </Grid>
                                     <Grid item>
-                                        < ColorButton onClick={() => { deleteQuestion(index) }} type="ColorButton">Delete Question</ColorButton>
+                                        < ColorButton style={{
+                                            marginTop: "10px",
+                                            marginLeft: "340px",
+                                            width: "170px"
+                                        }} onClick={() => { deleteQuestion(index) }} type="ColorButton">Delete Question</ColorButton>
                                     </Grid>
 
 
@@ -390,13 +422,16 @@ const CreateExam = (props) => {
                         )
 
                     })}
-                    <Grid item container xs={10} direction="row" spacing={10}>
+                    <Grid item container xs={10} direction="row">
                         <Grid
                             item justifyContent="flex-end"
 
                             alignItems="flex-end">
 
-                            <ColorButton onClick={addQuestion} type="ColorButton">Add Question</ColorButton>
+                            <ColorButton style={{
+                                marginLeft: "565px",
+                                width: "170px"
+                            }} onClick={addQuestion} type="ColorButton">Add Question</ColorButton>
                         </Grid>
 
                         <Grid item>

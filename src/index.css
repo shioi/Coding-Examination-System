@@ -1,7 +1,4 @@
-.body {
-  background-color: grey;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
 nav {
   display: flex;
@@ -94,3 +91,59 @@ nav li {
   font-weight: bold;
   font-style: oblique;
 }
+
+.exam, .questionForm, .dashboard, .createExam{
+  font-family: 'Poppins', sans-serif;
+}
+
+.quesheader{
+  background-color: rgb(39, 38, 38);
+  padding: 15px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.createExam{
+  padding-top: 50px;
+}
+
+.examtitle{
+  padding-top: 20px;
+  font-weight: bold;
+}
+
+.examdetails{
+  background-color: #fdeecc;
+  padding: 5px 50px 5px 50px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.dashboard ul li{
+text-decoration: none;
+padding: 10px;
+list-style: none;
+color: #12033b;
+font-size: 17px;
+font-weight: 700;
+}
+
+.questionForm center{
+  padding: 20px;
+}
+
+.questionForm{
+  background-color: #fdf3da;
+}
+
+.questionForm select {
+  font-size: 16px;
+  padding: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  color: #555;
+}
+

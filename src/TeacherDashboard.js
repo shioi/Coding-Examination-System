@@ -103,7 +103,7 @@ function DashboardContent() {
 
     return (
         <ThemeProvider theme={mdTheme}>
-            <Box sx={{ display: 'flex' }}>
+            <Box className="dashboard" sx={{ display: 'flex' }}>
                 <CssBaseline />
                 <AppBar position="absolute" open={open}>
                     <Toolbar
@@ -130,7 +130,7 @@ function DashboardContent() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Upcoming Exams
+                            UPCOMING EXAMS
                         </Typography>
                         <IconButton color="inherit">
                             <Badge color="secondary">
@@ -160,7 +160,7 @@ function DashboardContent() {
                             <Link to='/createExam'>Conduct Exam</Link>
                         </li>
                         <li><Link to="#" onClick={() => setCategory("ongoing")}>Ongoing</Link></li>
-                        <li>                        <Link to="#" onClick={() => setCategory("upcoming")}>Upcoming</Link></li>
+                        <li><Link to="#" onClick={() => setCategory("upcoming")}>Upcoming</Link></li>
                         <li><Link to="#" onClick={() => setCategory("Done")}>Done</Link></li>
                     </ul>
                 </Drawer>

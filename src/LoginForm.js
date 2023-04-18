@@ -35,12 +35,12 @@ const LoginForm = ({ Login }) => {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 0,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             backgroundColor: 'white', // set background color to white
-            padding: '24px', // add padding
+            padding: '25px', // add padding
             borderRadius: '8px', // add border radius
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // add box shadow
           }}
@@ -49,7 +49,7 @@ const LoginForm = ({ Login }) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Welcome, Christite!
+            <b>Welcome, Christite !</b>
           </Typography>
           <Box component="form" onSubmit={submitHandler} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -80,7 +80,7 @@ const LoginForm = ({ Login }) => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor: '#ffa726' }} // set button background color to orange (#ffa726)
+              sx={{ mt: 3, mb: 2, backgroundColor: '#233DBA' }} // set button background color to orange (#ffa726)
             >
               Sign In
             </Button>

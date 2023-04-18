@@ -28,8 +28,8 @@ const Exam = (props) => {
 
     return (
         <div className="exam">
-            <Typography variant='h3'>
-                Upcoming Exams
+            <Typography className="examtitle" variant='h6'>
+                <center>UPCOMING EXAMS</center>
             </Typography>
 
             {error && <div>{error}</div>}
@@ -39,13 +39,13 @@ const Exam = (props) => {
                     <Box key={question.id}
                         sx={{ boxShadow: 6 }}
                     >
-                        <ul>
+                        <ul className="examdetails">
                             <li>
-                                <h2>{question.name}</h2>
+                                <h3>{question.name}</h3>
                                 <h3>{question.duration}</h3>
-                                <p>Total Marks: {question.totalMarks}</p>
-                                <p>Status: {question.examstatus}</p>
-                                <p>Date: {formatDateTime(question.Date)}</p>
+                                <p><b>Total Marks  :</b> {question.totalMarks}</p>
+                                <p><b>Status       : </b>{question.examstatus}</p>
+                                <p><b>Date & Time  :</b> {formatDateTime(question.Date)}</p>
                             </li>
                         </ul>
                     </Box>

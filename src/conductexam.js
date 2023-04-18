@@ -84,7 +84,6 @@ const Conductexam = () => {
             return (
 
                 <CreateExam
-
                     examName={examName}
                     subject={subject}
                     duration={duration}

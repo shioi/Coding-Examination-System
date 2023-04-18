@@ -56,9 +56,9 @@ const Login = (props) => {
       alignItems: 'center' // center the content vertically
     }}>
       <div style={{
-        maxWidth: '400px', // set maximum width for the login form
-        padding: '32px', // add padding for spacing
-        backgroundColor: '#fff', // set background color for the login form
+        maxWidth: '450px', // set maximum width for the login form
+        padding: '30px', // add padding for spacing
+        backgroundColor: '#fdeecc', // set background color for the login form
         borderRadius: '4px', // add border radius for rounded corners
         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' // add box shadow for a subtle effect
       }}>
@@ -68,7 +68,7 @@ const Login = (props) => {
           <Alert severity="error" onClose={handleClose} sx={{ width: '100%' }}>{message}</Alert>
         </Snackbar>
       </div>
-    </div>
+    </div >
   )
 }
 

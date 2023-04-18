@@ -3,6 +3,7 @@ import { useAuthContext } from './useAuthContext';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { Typography } from "@mui/material";
 
 
 const ChooseStudent = (props) => {
@@ -60,34 +61,65 @@ const ChooseStudent = (props) => {
 
 
     return (
-        <Box>
-            <h1>Choose Students</h1>
-            <button onClick={prev}>previous</button>
-            {data &&
-                <div style={{ height: 500, width: '100%' }}>
-                    <DataGrid
-                        rows={data}
-                        columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
-                        checkboxSelection
-                        getRowId={(row) => row.registerno}
-                        slots={{ toolbar: GridToolbar }}
-                        slotProps={{
-                            toolbar: {
-                                showQuickFilter: true,
-                                quickFilterProps: { debounceMs: 500 },
-                            },
-                        }}
-                        onRowSelectionModelChange={(newRowSelectionModel) => {
-                            setSelection(newRowSelectionModel);
-                        }}
-                        rowSelectionModel={select}
-                    />
-                </div>
-            }
-            <Button variant="outlined" onClick={submit}>Submit</Button>
-        </Box>
+        <div>
+            <Box>
+                <Box
+                    sx={{
+                        width: "100%",
+                        height: "16vh",
+                        backgroundColor: '#383839',
+                        color: "white",
+                        boxShadow: 1,
+                        borderRadius: "10px"
+                    }}
+                >
+                    <center>
+                        <Typography style={{ paddingTop: "20px" }} variant="h5">CHOOSE STUDENT</Typography>
+                        <button style={{
+                            marginTop: "10px", color: "white",
+                            backgroundColor: "#233DBA", padding: "10px", border: "1px solid #233DBA", borderRadius: "5px", fontSize: "17px"
+                        }} onClick={prev}>Previous</button>
+                    </center>
+
+                </Box>
+
+
+                {data &&
+                    <div style={{ height: 500, width: '100%' }}>
+                        <DataGrid
+                            rows={data}
+                            columns={columns}
+                            pageSize={5}
+                            rowsPerPageOptions={[5]}
+                            checkboxSelection
+                            getRowId={(row) => row.registerno}
+                            slots={{ toolbar: GridToolbar }}
+                            slotProps={{
+                                toolbar: {
+                                    showQuickFilter: true,
+                                    quickFilterProps: { debounceMs: 500 },
+                                },
+                            }}
+                            onRowSelectionModelChange={(newRowSelectionModel) => {
+                                setSelection(newRowSelectionModel);
+                            }}
+                            rowSelectionModel={select}
+                        />
+                    </div>
+                }
+                <br />
+                <center>
+                    <Button style={{
+                        marginTop: "20px",
+                        color: "white",
+                        fontSize: "17px",
+                        backgroundColor: "#233DBA",
+                    }} variant="outlined" onClick={submit}>Submit</Button>
+                </center>
+
+            </Box>
+        </div>
+
     );
 }
 

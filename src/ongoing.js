@@ -1,6 +1,6 @@
 import useFetch from './useFetch';
 import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
+import { Box, Typography } from '@mui/material';
 import { useAuthContext } from './useAuthContext';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -32,14 +32,16 @@ const OngoingExam = (props) => {
 
     return (
         <div className="exam">
-            <h1>Current Exams</h1>
+            <Typography className="examtitle" variant='h6'>
+                <center>CURRENT EXAMS</center>
+            </Typography>
             {error && <div>{error}</div>}
             {isLoading && <div>Loading ...</div>}
             {data &&
                 data.map((question, index) => {
                     return (
                         <Box key={question.id} sx={{ display: 'flex', ...commonStyles, borderRadius: '16px' }}>
-                            <ul>
+                            <ul className="examdetails">
                                 <li>
                                     <h2>{question.name}</h2>
                                     <h3>{question.duration}</h3>

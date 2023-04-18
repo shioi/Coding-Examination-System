@@ -34,7 +34,7 @@ const Navigation = () => {
             {user.isProf === 0 &&
                 <Toolbar>
                     <IconButton size="large" edge='start'>
-                        <img src="/Images/Logo.jpg" alt="logo"></img>
+                        <img src="/Images/Logo.jpg" alt="logo" width="130px" heigth="150px"></img>
                     </IconButton>
                     <Typography sx={{ flexGrow: 1 }}></Typography>
                     <Stack
