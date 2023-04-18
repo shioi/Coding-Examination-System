@@ -184,13 +184,7 @@ function DashboardContent() {
 
     return (
         <ThemeProvider theme={mdTheme}>
-<<<<<<< HEAD
             <Box className="dashboard" sx={{ display: 'flex' }}>
-=======
-            <Box sx={{ display: 'flex' }}>
-
-
->>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
                 <CssBaseline />
                 <AppBar position="absolute" open={open}>
                     <Toolbar
@@ -218,11 +212,7 @@ function DashboardContent() {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-<<<<<<< HEAD
                             UPCOMING EXAMS
-=======
-                            {category}
->>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
                         </Typography>
                         <IconButton color="inherit">
                             <Badge color="secondary">
@@ -252,13 +242,8 @@ function DashboardContent() {
                             <Link to='/createExam'>Conduct Exam</Link>
                         </li>
                         <li><Link to="#" onClick={() => setCategory("ongoing")}>Ongoing</Link></li>
-<<<<<<< HEAD
                         <li><Link to="#" onClick={() => setCategory("upcoming")}>Upcoming</Link></li>
                         <li><Link to="#" onClick={() => setCategory("Done")}>Done</Link></li>
-=======
-                        <li>                        <Link to="#" onClick={() => setCategory("upcoming")}>Upcoming</Link></li>
-                        <li><Link to="#" onClick={() => setCategory("Done")}>Finished</Link></li>
->>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
                     </ul>
                 </Drawer>
                 <Box

@@ -61,7 +61,7 @@ const ChooseStudent = (props) => {
 
 
     return (
-        <div>
+        <div className="chooseStud">
             <Box>
                 <Box
                     sx={{

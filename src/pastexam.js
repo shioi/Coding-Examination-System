@@ -35,13 +35,9 @@ const PastExams = (props) => {
 
     return (
         <div className="exam">
-<<<<<<< HEAD
             <Typography className="examtitle" variant='h6'>
                 <center>PAST EXAMS</center>
             </Typography>
-=======
-            <h1>Past Exams</h1>
->>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
             {error && <div>{error}</div>}
             {isLoading && <div>Loading ...</div>}
             {data && data.map((question, index) => {

@@ -92,8 +92,7 @@ nav li {
   font-style: oblique;
 }
 
-<<<<<<< HEAD
-.exam, .questionForm, .dashboard, .createExam{
+.exam, .questionForm, .dashboard, .createExam, .chooseStud{
   font-family: 'Poppins', sans-serif;
 }
 
@@ -148,11 +147,3 @@ font-weight: 700;
   color: #555;
 }
 
-=======
-
-.display-list {
-  list-style-type: none;
-  font-weight: bold;
-  font-size: 20px;
-}
->>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a

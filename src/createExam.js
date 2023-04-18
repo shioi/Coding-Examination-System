@@ -157,29 +157,19 @@ const CreateExam = (props) => {
             <Box
                 sx={{
                     width: "100%",
-<<<<<<< HEAD
                     height: "16vh",
                     backgroundColor: '#383839',
                     color: "white",
-=======
-                    height: "15vh",
-                    backgroundColor: '#3498db',
->>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
                     boxShadow: 1,
                     borderRadius: "10px"
                 }}
             >
-<<<<<<< HEAD
                 <center>
                     <Typography variant="h5"> <InsertDriveFileIcon /> CONDUCT EXAM</Typography>
                     <ColorButton style={{
                         marginTop: "5px"
                     }} onClick={next}>Next</ColorButton><br />
                 </center>
-=======
-                <InsertDriveFileIcon />
-                <Typography variant="h5" color="white">Conduct Exam</Typography>
->>>>>>> bec07cd765bbdd28cdc251018521357cecc0ee8a
 
             </Box>
             <Box component="form"

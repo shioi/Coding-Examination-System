@@ -198,12 +198,17 @@ const Signup = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={5}>
-                  <InputLabel id="demo-simple-select-label">Class</InputLabel>
+                  <InputLabel style={{ fontSize: "14px" }} id="demo-simple-select-label">Class</InputLabel>
                   <Select
+                    style={{
+                      width: "190px",
+                      height: "35px"
+                    }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={clas}
                     label="Class"
+                    name="Class"
                     onChange={handleChange}
                   >
                     <MenuItem value={"MCA-A"}>MCA-A</MenuItem>
